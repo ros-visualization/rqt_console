@@ -42,6 +42,7 @@ from .message import Message
 
 
 class MessageProxyModel(QSortFilterProxyModel):
+
     """
     Provides sorting and filtering capabilities for the MessageDataModel.
     Filtering is based on a collection of exclude and highlight filters.

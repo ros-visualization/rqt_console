@@ -38,6 +38,7 @@ from python_qt_binding.QtWidgets import QWidget
 
 
 class TextFilterWidget(QWidget):
+
     def __init__(self, parentfilter, rospack):
         """
         Widget for displaying interactive data related to text filtering.

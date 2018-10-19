@@ -36,11 +36,13 @@ from python_qt_binding.QtCore import Qt
 
 
 class SeverityFilter(BaseFilter):
+
     """
     Contains filter logic for a severity filter.
     If the message's severity text matches any of the text in the stored list
     then it is considered a match.
     """
+
     def __init__(self):
         super(SeverityFilter, self).__init__()
         self._selected_items = []

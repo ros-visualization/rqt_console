@@ -46,10 +46,12 @@ from .message_proxy_model import MessageProxyModel
 
 
 class Console(Plugin):
+
     """
     rqt_console plugin's main class. Handles communication with ros_gui and contains
     callbacks to handle incoming message
     """
+
     def __init__(self, context):
         """
         :param context: plugin context hook to enable adding widgets as a ROS_GUI pane, ''PluginContext''

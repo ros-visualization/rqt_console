@@ -37,9 +37,11 @@ from python_qt_binding.QtWidgets import QDialog
 
 
 class TextBrowseDialog(QDialog):
+
     """
     Simple text brower Dialog that sets its text from the passed in text.
     """
+
     def __init__(self, text, rospack):
         """
         :param text: value to set the text of the widget to, ''str''

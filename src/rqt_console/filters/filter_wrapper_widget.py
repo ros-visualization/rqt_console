@@ -39,9 +39,11 @@ from python_qt_binding.QtWidgets import QWidget
 
 
 class FilterWrapperWidget(QWidget):
+
     """
     Wraps the other filter widgets to provide enable check box, delete button control and uniform labeling
     """
+
     def __init__(self, widget, filter_name):
         """
         :param widget: the Qwidget to wrap ''Qwidget''

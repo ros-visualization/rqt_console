@@ -34,11 +34,13 @@ from .base_filter import BaseFilter
 
 
 class TopicFilter(BaseFilter):
+
     """
     Contains filter logic for a topic filter.
     If the message's topic text matches any of the text in the stored list
     then it is considered a match.
     """
+
     def __init__(self):
         super(TopicFilter, self).__init__()
         self._selected_items = []

@@ -42,10 +42,12 @@ from rqt_py_common.ini_helper import pack, unpack
 
 
 class ListFilterWidget(QWidget):
+
     """
     Generic List widget to be used when implementing filters that require
     limited dynamic selections
     """
+
     def __init__(self, parentfilter, rospack, item_provider):
         """
         :param parentfilter: The filter object, must implement set_list and

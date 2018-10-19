@@ -35,6 +35,7 @@ from .base_filter import BaseFilter
 
 
 class MessageFilter(BaseFilter):
+
     """
     Contains filter logic for a message filter. If the regex flag is False
     simple 'is this in that' text matching is used on _text. If the regex flag is True
