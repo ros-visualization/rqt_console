@@ -32,9 +32,11 @@
 
 
 class FilterCollection:
+
     """
     Collection of filters to test messages against.
     """
+
     def __init__(self):
         self._filters = []
 

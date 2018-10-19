@@ -35,6 +35,7 @@ from .base_filter import BaseFilter
 
 
 class TimeFilter(BaseFilter):
+
     """
     Contains filter logic for a time filter.
     If _stop_time_enabled is true then the message's time value must be between the dates provided

@@ -63,9 +63,11 @@ from .text_browse_dialog import TextBrowseDialog
 
 
 class ConsoleWidget(QWidget):
+
     """
     Primary widget for the rqt_console plugin.
     """
+
     def __init__(self, proxy_model, rospack, minimal=False):
         """
         :param proxymodel: the proxy model to display in the widget,''QSortFilterProxyModel''
@@ -143,7 +145,8 @@ class ConsoleWidget(QWidget):
 
         # Filter factory dictionary:
         # index 0 is a label describing the widget, index 1 is the class that provides filtering logic
-        # index 2 is the widget that sets the data in the filter class, index 3 are the arguments for the widget class constructor
+        # index 2 is the widget that sets the data in the filter class, index 3
+        # are the arguments for the widget class constructor
         self._filter_factory_order = ['message', 'severity', 'node', 'time', 'topic', 'location', 'custom']
         self.filter_factory = {'message': (self.tr('...containing'), MessageFilter, TextFilterWidget),
                                'severity': (self.tr('...with severities'), SeverityFilter, ListFilterWidget, self._model.get_severity_dict),
@@ -281,12 +284,14 @@ class ConsoleWidget(QWidget):
         index = len(self._highlight_filters)
         newfilter = self.filter_factory[filter_index][1]()
         if len(self.filter_factory[filter_index]) >= 4:
-            newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack, self.filter_factory[filter_index][3])
+            newwidget = self.filter_factory[filter_index][2](
+                newfilter, self._rospack, self.filter_factory[filter_index][3])
         else:
             newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack)
 
         # pack the new filter tuple onto the filter list
-        self._highlight_filters.append((newfilter, FilterWrapperWidget(newwidget, self.filter_factory[filter_index][0]), filter_index))
+        self._highlight_filters.append(
+            (newfilter, FilterWrapperWidget(newwidget, self.filter_factory[filter_index][0]), filter_index))
         self._proxy_model.add_highlight_filter(newfilter)
         newfilter.filter_changed_signal.connect(self._proxy_model.handle_highlight_filters_changed)
         self._highlight_filters[index][1].delete_button.clicked.connect(self._delete_highlight_filter)
@@ -328,12 +333,14 @@ class ConsoleWidget(QWidget):
         index = len(self._exclude_filters)
         newfilter = self.filter_factory[filter_index][1]()
         if len(self.filter_factory[filter_index]) >= 4:
-            newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack, self.filter_factory[filter_index][3])
+            newwidget = self.filter_factory[filter_index][2](
+                newfilter, self._rospack, self.filter_factory[filter_index][3])
         else:
             newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack)
 
         # pack the new filter tuple onto the filter list
-        self._exclude_filters.append((newfilter, FilterWrapperWidget(newwidget, self.filter_factory[filter_index][0]), filter_index))
+        self._exclude_filters.append(
+            (newfilter, FilterWrapperWidget(newwidget, self.filter_factory[filter_index][0]), filter_index))
         self._proxy_model.add_exclude_filter(newfilter)
         newfilter.filter_changed_signal.connect(self._proxy_model.handle_exclude_filters_changed)
         self._exclude_filters[index][1].delete_button.clicked.connect(self._delete_exclude_filter)
@@ -373,10 +380,12 @@ class ConsoleWidget(QWidget):
                 message = message.replace('.', '\\.')
                 if exclude:
                     filter_index = self._add_exclude_filter(selectiontype.lower())
-                    filter_widget = self._exclude_filters[filter_index][1].findChildren(QWidget, QRegExp('.*FilterWidget.*'))[0]
+                    filter_widget = self._exclude_filters[filter_index][1].findChildren(
+                        QWidget, QRegExp('.*FilterWidget.*'))[0]
                 else:
                     filter_index = self._add_highlight_filter(col)
-                    filter_widget = self._highlight_filters[filter_index][1].findChildren(QWidget, QRegExp('.*FilterWidget.*'))[0]
+                    filter_widget = self._highlight_filters[filter_index][1].findChildren(
+                        QWidget, QRegExp('.*FilterWidget.*'))[0]
                 filter_widget.set_regex(True)
                 filter_widget.set_text('^' + message + '$')
 
@@ -399,10 +408,12 @@ class ConsoleWidget(QWidget):
                             filter_index = index
 
             if exclude:
-                filter_widget = self._exclude_filters[filter_index][1].findChildren(QWidget, QRegExp('.*FilterWidget.*'))[0]
+                filter_widget = self._exclude_filters[filter_index][1].findChildren(
+                    QWidget, QRegExp('.*FilterWidget.*'))[0]
                 filter_widget.select_item(selection)
             else:
-                filter_widget = self._highlight_filters[filter_index][1].findChildren(QWidget, QRegExp('.*FilterWidget.*'))[0]
+                filter_widget = self._highlight_filters[filter_index][1].findChildren(
+                    QWidget, QRegExp('.*FilterWidget.*'))[0]
                 filter_widget.select_item(selection)
 
     def _rightclick_menu(self, event):
@@ -420,8 +431,14 @@ class ConsoleWidget(QWidget):
 
         # menutext entries turned into
         menutext = []
-        menutext.append([self.tr('Exclude'), [[self.tr('Severity'), severities], [self.tr('Node'), nodes], [self.tr('Topic'), topics], [self.tr('Selected Message(s)')]]])
-        menutext.append([self.tr('Highlight'), [[self.tr('Severity'), severities], [self.tr('Node'), nodes], [self.tr('Topic'), topics], [self.tr('Selected Message(s)')]]])
+        menutext.append([self.tr('Exclude'), [[self.tr('Severity'), severities],
+                                              [self.tr('Node'), nodes],
+                                              [self.tr('Topic'), topics],
+                                              [self.tr('Selected Message(s)')]]])
+        menutext.append([self.tr('Highlight'), [[self.tr('Severity'), severities],
+                                                [self.tr('Node'), nodes],
+                                                [self.tr('Topic'), topics],
+                                                [self.tr('Selected Message(s)')]]])
         menutext.append([self.tr('Copy Selected')])
         menutext.append([self.tr('Browse Selected')])
 
@@ -510,7 +527,8 @@ class ConsoleWidget(QWidget):
         Message._next_id = 1
 
     def _handle_load_clicked(self, checked):
-        filename = QFileDialog.getOpenFileName(self, self.tr('Load from File'), '.', self.tr('rqt_console message file {.csv} (*.csv)'))
+        filename = QFileDialog.getOpenFileName(
+            self, self.tr('Load from File'), '.', self.tr('rqt_console message file {.csv} (*.csv)'))
         if filename[0] != '':
             try:
                 with open(filename[0], 'r') as h:
@@ -597,7 +615,8 @@ class ConsoleWidget(QWidget):
                 if msg:
                     messages.append(msg)
             if skipped:
-                qWarning('Skipped %d rows since they do not appear to be in rqt_console message file format:\n- %s' % (len(skipped), '\n- '.join(skipped)))
+                qWarning('Skipped %d rows since they do not appear to be in rqt_console message file format:\n- %s' %
+                         (len(skipped), '\n- '.join(skipped)))
 
             if messages:
                 self._model.insert_rows(messages)
@@ -611,7 +630,8 @@ class ConsoleWidget(QWidget):
             return False
 
     def _handle_save_clicked(self, checked):
-        filename = QFileDialog.getSaveFileName(self, 'Save to File', '.', self.tr('rqt_console msg file {.csv} (*.csv)'))
+        filename = QFileDialog.getSaveFileName(
+            self, 'Save to File', '.', self.tr('rqt_console msg file {.csv} (*.csv)'))
         if filename[0] != '':
             filename = filename[0]
             if filename[-4:] != '.csv':
@@ -672,7 +692,10 @@ class ConsoleWidget(QWidget):
         if event.key() == Qt.Key_Delete and len(self._model._messages) > 0:
             delete = QMessageBox.Yes
             if len(self.table_view.selectionModel().selectedIndexes()) == 0:
-                delete = QMessageBox.question(self, self.tr('Message'), self.tr("Are you sure you want to delete all messages?"), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                delete = QMessageBox.question(
+                    self, self.tr('Message'),
+                    self.tr("Are you sure you want to delete all messages?"),
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if delete == QMessageBox.Yes and event.key() == Qt.Key_Delete and event.modifiers() == Qt.NoModifier:
                 if self._delete_selected_rows():
                     event.accept()

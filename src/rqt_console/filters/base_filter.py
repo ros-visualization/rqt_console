@@ -34,6 +34,7 @@ from python_qt_binding.QtCore import QObject, QTimer, Signal
 
 
 class BaseFilter(QObject):
+
     """
     Contains basic functions common to all filters.
     Handles enabled logic and change notification.

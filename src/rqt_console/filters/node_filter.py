@@ -34,11 +34,13 @@ from .base_filter import BaseFilter
 
 
 class NodeFilter(BaseFilter):
+
     """
     Contains filter logic for a single node filter.
     If the message's node text matches any of the text in the stored list
     then it is considered a match.
     """
+
     def __init__(self):
         super(NodeFilter, self).__init__()
         self._selected_items = []

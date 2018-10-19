@@ -38,6 +38,7 @@ from .topic_filter import TopicFilter
 
 
 class CustomFilter(BaseFilter):
+
     """
     Contains filter logic for the custom filter which allows message, severity,
     node and topic filtering simultaniously. All of these filters must match

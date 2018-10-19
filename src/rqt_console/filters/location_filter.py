@@ -34,6 +34,7 @@ from .message_filter import MessageFilter
 
 
 class LocationFilter(MessageFilter):
+
     """
     Contains filter logic for a location filter.
     """

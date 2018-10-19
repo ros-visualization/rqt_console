@@ -94,7 +94,7 @@ class MessageDataModel(QAbstractTableModel):
                     if role == Qt.UserRole:
                         # append row number to define strict order
                         # shortest string representation to compare stamps
-                        #print(column, data, str(index.row()).zfill(len(str(len(self._messages)))))
+                        # print(column, data, str(index.row()).zfill(len(str(len(self._messages)))))
                         data = str(data) + ' %08x' % index.row()
                     return data
 
@@ -108,7 +108,7 @@ class MessageDataModel(QAbstractTableModel):
                         return self._error_icon
 
                 # colorize severity label
-                if role == Qt.ForegroundRole and column =='severity':
+                if role == Qt.ForegroundRole and column == 'severity':
                     assert msg.severity in MessageDataModel.severity_colors, 'Unknown severity type: %s' % msg.severity
                     return MessageDataModel.severity_colors[msg.severity]
 
