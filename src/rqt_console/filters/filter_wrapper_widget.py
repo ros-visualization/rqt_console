@@ -41,7 +41,8 @@ from python_qt_binding.QtWidgets import QWidget
 class FilterWrapperWidget(QWidget):
 
     """
-    Wraps the other filter widgets to provide enable check box, delete button control and uniform labeling
+    Wraps the other filter widgets to provide enable check box, delete button control and uniform
+    labeling
     """
 
     def __init__(self, widget, filter_name):
@@ -51,7 +52,8 @@ class FilterWrapperWidget(QWidget):
         """
         super(FilterWrapperWidget, self).__init__()
         rp = rospkg.RosPack()
-        ui_file = os.path.join(rp.get_path('rqt_console'), 'resource/filters', 'filter_wrapper_widget.ui')
+        ui_file = os.path.join(
+            rp.get_path('rqt_console'), 'resource/filters', 'filter_wrapper_widget.ui')
         loadUi(ui_file, self)
         self.setObjectName('FilterWrapperWidget')
         self.delete_button.setIcon(QIcon.fromTheme('list-remove'))

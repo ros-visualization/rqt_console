@@ -49,7 +49,8 @@ class TimeFilterWidget(QWidget):
         the min and max time to be displayed, ''list of tuple''
         """
         super(TimeFilterWidget, self).__init__()
-        ui_file = os.path.join(rospack.get_path('rqt_console'), 'resource/filters', 'time_filter_widget.ui')
+        ui_file = os.path.join(
+            rospack.get_path('rqt_console'), 'resource/filters', 'time_filter_widget.ui')
         loadUi(ui_file, self)
         self.setObjectName('TimeFilterWidget')
         self._parentfilter = parentfilter  # When data is changed it is stored in the parent filter
@@ -98,8 +99,10 @@ class TimeFilterWidget(QWidget):
         Saves the settings for this filter to an ini file.
         :param settings: used to write the settings to an ini file ''qt_gui.settings.Settings''
         """
-        settings.set_value('start_time', self._parentfilter._start_time.toString('hh:mm:ss.zzz (yyyy-MM-dd)'))
-        settings.set_value('stop_time', self._parentfilter._stop_time.toString('hh:mm:ss.zzz (yyyy-MM-dd)'))
+        settings.set_value(
+            'start_time', self._parentfilter._start_time.toString('hh:mm:ss.zzz (yyyy-MM-dd)'))
+        settings.set_value(
+            'stop_time', self._parentfilter._stop_time.toString('hh:mm:ss.zzz (yyyy-MM-dd)'))
         settings.set_value('stop_time_enabled', self._parentfilter._stop_time_enabled)
 
     def restore_settings(self, settings):
@@ -109,11 +112,13 @@ class TimeFilterWidget(QWidget):
         """
         self.handle_stop_enabled_changed(settings.value('stop_time_enabled') in [True, 'true'])
         if settings.contains('start_time'):
-            self.handle_start_changed(QDateTime.fromString(settings.value('start_time'), 'hh:mm:ss.zzz (yyyy-MM-dd)'))
+            self.handle_start_changed(
+                QDateTime.fromString(settings.value('start_time'), 'hh:mm:ss.zzz (yyyy-MM-dd)'))
         else:
             self.handle_start_changed(QDateTime(datetime.now()))
         if settings.contains('stop_time'):
-            self.handle_stop_changed(QDateTime.fromString(settings.value('stop_time'), 'hh:mm:ss.zzz (yyyy-MM-dd)'))
+            self.handle_stop_changed(
+                QDateTime.fromString(settings.value('stop_time'), 'hh:mm:ss.zzz (yyyy-MM-dd)'))
         else:
             self.handle_stop_changed(QDateTime(datetime.now()))
 

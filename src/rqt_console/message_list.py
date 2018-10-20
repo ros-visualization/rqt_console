@@ -42,7 +42,9 @@ class MessageList(object):
 
     def __delitem__(self, key):
         if isinstance(key, slice):
-            assert key.step is None or key.step == 1, 'MessageList.__delitem__ not implemented for slices with step argument different than 1'
+            assert key.step is None or key.step == 1, \
+                'MessageList.__delitem__ not implemented for slices with step argument ' \
+                'different than 1'
             del self._messages[len(self._messages) - key.stop:len(self._messages) - key.start]
         else:
             del self._messages[len(self._messages) - key - 1]
