@@ -51,7 +51,8 @@ class ConsoleSettingsDialog(QDialog):
         :param limit: displayed in the message buffer size spin box, ''int''
         """
         super(ConsoleSettingsDialog, self).__init__()
-        ui_file = os.path.join(rospack.get_path('rqt_console'), 'resource', 'console_settings_dialog.ui')
+        ui_file = os.path.join(
+            rospack.get_path('rqt_console'), 'resource', 'console_settings_dialog.ui')
         loadUi(ui_file, self)
         for topic in topics:
             self.topic_combo.addItem(topic[0] + ' (' + topic[1] + ')', topic[0])

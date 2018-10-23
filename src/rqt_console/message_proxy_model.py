@@ -70,7 +70,8 @@ class MessageProxyModel(QSortFilterProxyModel):
 
     def filterAcceptsRow(self, sourcerow, sourceparent):
         """
-        returns: True if the row does not match any exclude filter AND (_show_highlighted_only is False OR it matches any highlight filter), ''bool''
+        returns: True if the row does not match any exclude filter AND (_show_highlighted_only is
+                 False OR it matches any highlight filter), ''bool''
         """
         msg = self._source_model._messages[sourcerow]
         if self._exclude_filters.test_message(msg):
@@ -81,7 +82,8 @@ class MessageProxyModel(QSortFilterProxyModel):
         if self._highlight_filters.count_enabled_filters() > 0:
             highlighted = self._highlight_filters.test_message(msg, default=True)
         if self._show_highlighted_only and not highlighted:
-            # hide messages which are not highlighted when only highlightes messages should be visible
+            # hide messages which are not highlighted when only highlightes messages
+            # should be visible
             return False
 
         # update message state
@@ -117,9 +119,11 @@ class MessageProxyModel(QSortFilterProxyModel):
         else:
             self.invalidateFilter()
             if qVersion().startswith('4.'):
-                self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1))
+                self.dataChanged.emit(
+                    self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1))
             else:
-                self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1), [])
+                self.dataChanged.emit(
+                    self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1), [])
 
     def add_exclude_filter(self, newfilter):
         self._exclude_filters.append(newfilter)

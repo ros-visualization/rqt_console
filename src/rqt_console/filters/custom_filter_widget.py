@@ -45,15 +45,18 @@ class CustomFilterWidget(QWidget):
 
     def __init__(self, parentfilter, rospack, item_providers):
         super(CustomFilterWidget, self).__init__()
-        ui_file = os.path.join(rospack.get_path('rqt_console'), 'resource/filters', 'custom_filter_widget.ui')
+        ui_file = os.path.join(
+            rospack.get_path('rqt_console'), 'resource/filters', 'custom_filter_widget.ui')
         loadUi(ui_file, self)
         self.setObjectName('CustomFilterWidget')
         self._parentfilter = parentfilter  # When data is changed it is stored in the parent filter
 
         # keep color for highlighted items even when not active
         for list_widget in [self.severity_list, self.node_list, self.topic_list]:
-            active_color = list_widget.palette().brush(QPalette.Active, QPalette.Highlight).color().name()
-            list_widget.setStyleSheet('QListWidget:item:selected:!active { background: %s; }' % active_color)
+            active_color = list_widget.palette().brush(
+                QPalette.Active, QPalette.Highlight).color().name()
+            list_widget.setStyleSheet(
+                'QListWidget:item:selected:!active { background: %s; }' % active_color)
 
         # Text Filter Initialization
         self.text_edit.textChanged.connect(self.handle_text_changed)

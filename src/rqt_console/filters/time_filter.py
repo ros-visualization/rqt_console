@@ -85,8 +85,8 @@ class TimeFilter(BaseFilter):
     def test_message(self, message):
         """
         Tests if the message matches the filter.
-        If _stop_time_enabled is true then the message's time value must be between the dates provided
-        to be considered a match
+        If _stop_time_enabled is true then the message's time value must be between the dates
+        provided to be considered a match
         If _stop_time_enabled is false then the time must simply be after _start_time
         :param message: the message to be tested against the filters, ''Message''
         :returns: True if the message matches, ''bool''

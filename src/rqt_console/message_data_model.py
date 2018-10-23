@@ -109,7 +109,8 @@ class MessageDataModel(QAbstractTableModel):
 
                 # colorize severity label
                 if role == Qt.ForegroundRole and column == 'severity':
-                    assert msg.severity in MessageDataModel.severity_colors, 'Unknown severity type: %s' % msg.severity
+                    assert msg.severity in MessageDataModel.severity_colors, \
+                        'Unknown severity type: %s' % msg.severity
                     return MessageDataModel.severity_colors[msg.severity]
 
                 if role == Qt.ToolTipRole and column != 'severity':
@@ -120,7 +121,8 @@ class MessageDataModel(QAbstractTableModel):
                     else:
                         data = getattr(msg, column)
                     # <font> tag enables word wrap by forcing rich text
-                    return '<font>' + data + '<br/><br/>' + self.tr('Right click for menu.') + '</font>'
+                    return '<font>' + data + '<br/><br/>' + \
+                        self.tr('Right click for menu.') + '</font>'
 
     def headerData(self, section, orientation, role=None):
         if role is None:
@@ -135,7 +137,9 @@ class MessageDataModel(QAbstractTableModel):
                 if section == 0:
                     return self.tr('Sort the rows by serial number in descendig order')
                 else:
-                    return self.tr('Sorting the table by a column other then the serial number slows down the interaction especially when recording high frequency data')
+                    return self.tr(
+                        'Sorting the table by a column other then the serial number slows down the '
+                        'interaction especially when recording high frequency data')
 
     # END Required implementations of QAbstractTableModel functions
 
@@ -217,7 +221,8 @@ class MessageDataModel(QAbstractTableModel):
     def get_time_range(self, rowlist):
         """
         :param rowlist: a list of row indexes, ''list''
-        :returns: a tuple of min and max times in a rowlist in '(unix timestamp).(fraction of second)' format, ''tuple(str,str)''
+        :returns: a tuple of min and max times in a rowlist in
+                  '(unix timestamp).(fraction of second)' format, ''tuple(str,str)''
         """
         min_ = float("inf")
         max_ = float("-inf")
@@ -230,19 +235,19 @@ class MessageDataModel(QAbstractTableModel):
         return min_, max_
 
     def get_unique_nodes(self):
-        nodes = set([])
+        nodes = set()
         for message in self._messages:
             nodes.add(message.node)
         return nodes
 
     def get_unique_severities(self):
-        severities = set([])
+        severities = set()
         for message in self._messages:
             severities.add(message.severity)
         return severities
 
     def get_unique_topics(self):
-        topics = set([])
+        topics = set()
         for message in self._messages:
             for topic in message.topics:
                 topics.add(topic)
