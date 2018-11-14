@@ -32,21 +32,27 @@
 
 import os
 
+from ament_index_python import get_resource
+
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QDialog
-
+from python_qt_binding.QtGui import QFont
 
 class TextBrowseDialog(QDialog):
-
     """
     Simple text brower Dialog that sets its text from the passed in text.
     """
-
-    def __init__(self, text, rospack):
+    def __init__(self, text):
         """
         :param text: value to set the text of the widget to, ''str''
         """
         super(TextBrowseDialog, self).__init__()
-        ui_file = os.path.join(rospack.get_path('rqt_console'), 'resource', 'text_browse_dialog.ui')
+
+        _, package_path = get_resource('packages', 'rqt_console')
+        ui_file = os.path.join(
+            package_path, 'share', 'rqt_console', 'resource', 'text_browse_dialog.ui')
+
+        self.setFont(QFont('Mono'))
+
         loadUi(ui_file, self)
         self.text_browser.setText(text)

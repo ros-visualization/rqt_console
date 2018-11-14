@@ -32,6 +32,8 @@
 
 import os
 
+from ament_index_python.resources import get_resource
+
 from python_qt_binding import loadUi
 from python_qt_binding.QtGui import QCursor, QIcon
 from python_qt_binding.QtWidgets import (QApplication, QFileDialog, QHeaderView,
@@ -69,7 +71,7 @@ class ConsoleWidget(QWidget):
     Primary widget for the rqt_console plugin.
     """
 
-    def __init__(self, proxy_model, rospack, minimal=False):
+    def __init__(self, proxy_model, minimal=False):
         """
         :param proxymodel: the proxy model to display in the widget,''QSortFilterProxyModel''
         :param minimal: if true the load, save and column buttons will be hidden as well as the
@@ -79,14 +81,16 @@ class ConsoleWidget(QWidget):
         self._proxy_model = proxy_model
         self._model = self._proxy_model.sourceModel()
         self._paused = False
-        self._rospack = rospack
 
         # These are lists of Tuples = (,)
         self._exclude_filters = []
         self._highlight_filters = []
 
+        pkg_name = 'rqt_console'
+        _, package_path = get_resource('packages', pkg_name)
         ui_file = os.path.join(
-            self._rospack.get_path('rqt_console'), 'resource', 'console_widget.ui')
+            package_path, 'share', pkg_name, 'resource', 'console_widget.ui')
+
         loadUi(ui_file, self)
 
         if minimal:
@@ -327,9 +331,9 @@ class ConsoleWidget(QWidget):
         newfilter = self.filter_factory[filter_index][1]()
         if len(self.filter_factory[filter_index]) >= 4:
             newwidget = self.filter_factory[filter_index][2](
-                newfilter, self._rospack, self.filter_factory[filter_index][3])
+                newfilter, self.filter_factory[filter_index][3])
         else:
-            newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack)
+            newwidget = self.filter_factory[filter_index][2](newfilter)
 
         # pack the new filter tuple onto the filter list
         self._highlight_filters.append((
@@ -384,9 +388,9 @@ class ConsoleWidget(QWidget):
         newfilter = self.filter_factory[filter_index][1]()
         if len(self.filter_factory[filter_index]) >= 4:
             newwidget = self.filter_factory[filter_index][2](
-                newfilter, self._rospack, self.filter_factory[filter_index][3])
+                newfilter, self.filter_factory[filter_index][3])
         else:
-            newwidget = self.filter_factory[filter_index][2](newfilter, self._rospack)
+            newwidget = self.filter_factory[filter_index][2](newfilter)
 
         # pack the new filter tuple onto the filter list
         self._exclude_filters.append((
@@ -585,7 +589,7 @@ class ConsoleWidget(QWidget):
             rowlist.append(self._proxy_model.mapToSource(current).row())
         browsetext = self._model.get_selected_text(rowlist)
         if browsetext is not None:
-            self._browsers.append(TextBrowseDialog(browsetext, self._rospack))
+            self._browsers.append(TextBrowseDialog(browsetext))
             self._browsers[-1].show()
 
     def _handle_clear_button_clicked(self, checked):

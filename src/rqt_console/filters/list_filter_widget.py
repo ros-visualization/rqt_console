@@ -31,7 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import rospkg
+
+from ament_index_python.resources import get_resource
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
@@ -48,15 +49,19 @@ class ListFilterWidget(QWidget):
     limited dynamic selections
     """
 
-    def __init__(self, parentfilter, rospack, item_provider):
+    def __init__(self, parentfilter, item_provider):
         """
         :param parentfilter: The filter object, must implement set_list and
         contain _list ''QObject''
         :param item_provider: a function designed to provide a list or dict
         """
         super(ListFilterWidget, self).__init__()
+
+        pkg_name = 'rqt_console'
+        _, package_path = get_resource('packages', pkg_name)
         ui_file = os.path.join(
-            rospack.get_path('rqt_console'), 'resource/filters', 'list_filter_widget.ui')
+            package_path, 'share', pkg_name, 'resource', 'filters', 'list_filter_widget.ui')
+
         loadUi(ui_file, self)
         self.setObjectName('ListFilterWidget')
         # When data is changed we need to store it in the parent filter

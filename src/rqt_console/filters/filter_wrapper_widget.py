@@ -31,7 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import rospkg
+
+from ament_index_python.resources import get_resource
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtGui import QIcon
@@ -51,9 +52,12 @@ class FilterWrapperWidget(QWidget):
         :param filter_name: the name to be placed on the label ''str''
         """
         super(FilterWrapperWidget, self).__init__()
-        rp = rospkg.RosPack()
+
+        pkg_name = 'rqt_console'
+        _, package_path = get_resource('packages', pkg_name)
         ui_file = os.path.join(
-            rp.get_path('rqt_console'), 'resource/filters', 'filter_wrapper_widget.ui')
+            package_path, 'share', pkg_name, 'resource', 'filters', 'filter_wrapper_widget.ui')
+
         loadUi(ui_file, self)
         self.setObjectName('FilterWrapperWidget')
         self.delete_button.setIcon(QIcon.fromTheme('list-remove'))

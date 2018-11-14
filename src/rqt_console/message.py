@@ -30,8 +30,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rosgraph_msgs.msg import Log
-
 from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
 
@@ -62,7 +60,6 @@ class Message(QObject):
         self.severity = None
         self.node = None
         self.__stamp = (None, None)
-        self.topics = []
         self.location = None
 
         self._stamp_compare = None
@@ -115,8 +112,8 @@ class Message(QObject):
     def get_stamp_string(self):
         return self._stamp_string
 
-    def set_stamp_format(self, format):
-        self._stamp_format = format
+    def set_stamp_format(self, stamp_format):
+        self._stamp_format = stamp_format
         if None not in self.__stamp:
             self.stamp = self.__stamp
 
@@ -124,7 +121,6 @@ class Message(QObject):
         text = self.tr('Node: ') + self.node + '\n'
         text += self.tr('Time: ') + self.get_stamp_string() + '\n'
         text += self.tr('Severity: ') + Message.SEVERITY_LABELS[self.severity] + '\n'
-        text += self.tr('Published Topics: ') + ', '.join(self.topics) + '\n'
         text += '\n' + self.message + '\n'
         text += '\n' + 'Location:'
         text += '\n' + self.location + '\n\n'
