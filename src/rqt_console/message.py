@@ -35,11 +35,11 @@ from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
 class Message(QObject):
 
-    DEBUG = 1
-    INFO = 2
-    WARN = 4
-    ERROR = 8
-    FATAL = 16
+    DEBUG = 10
+    INFO = 20
+    WARN = 30
+    ERROR = 40
+    FATAL = 50
 
     SEVERITY_LABELS = {
         DEBUG: QCoreApplication.translate('Message', 'Debug'),
