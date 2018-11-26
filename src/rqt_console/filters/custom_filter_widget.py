@@ -31,7 +31,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import rospkg
+
+from ament_index_python.resources import get_resource
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
@@ -43,10 +44,14 @@ from rqt_py_common.ini_helper import pack, unpack
 
 class CustomFilterWidget(QWidget):
 
-    def __init__(self, parentfilter, rospack, item_providers):
+    def __init__(self, parentfilter, item_providers):
         super(CustomFilterWidget, self).__init__()
+
+        pkg_name = 'rqt_console'
+        _, package_path = get_resource('packages', pkg_name)
         ui_file = os.path.join(
-            rospack.get_path('rqt_console'), 'resource/filters', 'custom_filter_widget.ui')
+            package_path, 'share', pkg_name, 'resource', 'filters', 'custom_filter_widget.ui')
+
         loadUi(ui_file, self)
         self.setObjectName('CustomFilterWidget')
         self._parentfilter = parentfilter  # When data is changed it is stored in the parent filter

@@ -30,19 +30,19 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rosgraph_msgs.msg import Log
-import rospkg
-import rospy
+from rcl_interfaces.msg import Log
+
+import rclpy
 
 from python_qt_binding.QtCore import QMutex, QMutexLocker, QTimer
 
 from qt_gui.plugin import Plugin
 
-from .console_settings_dialog import ConsoleSettingsDialog
-from .console_widget import ConsoleWidget
-from .message import Message
-from .message_data_model import MessageDataModel
-from .message_proxy_model import MessageProxyModel
+from rqt_console.console_settings_dialog import ConsoleSettingsDialog
+from rqt_console.console_widget import ConsoleWidget
+from rqt_console.message import Message
+from rqt_console.message_data_model import MessageDataModel
+from rqt_console.message_proxy_model import MessageProxyModel
 
 
 class Console(Plugin):
@@ -60,13 +60,12 @@ class Console(Plugin):
         super(Console, self).__init__(context)
         self.setObjectName('Console')
 
-        self._rospack = rospkg.RosPack()
-
+        self._context = context
         self._model = MessageDataModel()
         self._proxy_model = MessageProxyModel()
         self._proxy_model.setSourceModel(self._model)
 
-        self._widget = ConsoleWidget(self._proxy_model, self._rospack)
+        self._widget = ConsoleWidget(self._proxy_model)
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))
@@ -97,11 +96,11 @@ class Console(Plugin):
     def convert_rosgraph_log_message(log_msg):
         msg = Message()
         msg.set_stamp_format('hh:mm:ss.ZZZ (yyyy-MM-dd)')
+        msg.stamp = (log_msg.stamp.sec, log_msg.stamp.nanosec)
         msg.message = log_msg.msg
         msg.severity = log_msg.level
         msg.node = log_msg.name
-        msg.stamp = (log_msg.header.stamp.secs, log_msg.header.stamp.nsecs)
-        msg.topics = sorted(log_msg.topics)
+        msg.stamp = (log_msg.header.stamp.sec, log_msg.header.stamp.nanosec)
         msg.location = log_msg.file + ':' + log_msg.function + ':' + str(log_msg.line)
         return msg
 
@@ -116,7 +115,7 @@ class Console(Plugin):
             self._model.insert_rows(msgs)
 
     def shutdown_plugin(self):
-        self._subscriber.unregister()
+        self._context.node.destroy_subscription(self._subscriber)
         self._timer.stop()
         self._widget.cleanup_browsers_on_close()
 
@@ -127,9 +126,13 @@ class Console(Plugin):
         self._widget.restore_settings(plugin_settings, instance_settings)
 
     def trigger_configuration(self):
-        topics = [t for t in rospy.get_published_topics() if t[1] == 'rosgraph_msgs/Log']
+        topics = [
+            topic_name for topic_name, topic_types
+            in self._context.node.get_topic_names_and_types()
+            if 'rcl_interfaces/Log' in topic_types]
+
         topics.sort(key=lambda tup: tup[0])
-        dialog = ConsoleSettingsDialog(topics, self._rospack)
+        dialog = ConsoleSettingsDialog(topics)
         (topic, message_limit) = dialog.query(self._topic, self._model.get_message_limit())
         if topic != self._topic:
             self._subscribe(topic)
@@ -138,6 +141,6 @@ class Console(Plugin):
 
     def _subscribe(self, topic):
         if self._subscriber:
-            self._subscriber.unregister()
-        self._subscriber = rospy.Subscriber(topic, Log, self.queue_message)
+            self._context.node.destroy_subscription(self._subscriber)
+        self._subscriber = self._context.node.create_subscription(Log, topic, self.queue_message)
         self._currenttopic = topic
