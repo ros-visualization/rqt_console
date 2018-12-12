@@ -4,8 +4,6 @@ project(rqt_console)
 # Load ament and all dependencies required for this package
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
-# Note: This is needed for rcl_interfaces Log.msg
-find_package(rcl_interfaces REQUIRED)
 
 ament_python_install_package(${PROJECT_NAME}
     PACKAGE_DIR src/${PROJECT_NAME})
