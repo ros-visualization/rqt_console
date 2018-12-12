@@ -2,6 +2,10 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* remove unnecesary find_package call (`#9 <https://github.com/ros-visualization/rqt_console/issues/9>`_)
+
 1.0.0 (2018-12-11)
 ------------------
 * porting rqt_console to ros2 (`#8 <https://github.com/ros-visualization/rqt_console/issues/8>`_)
