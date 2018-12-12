@@ -2,6 +2,13 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* porting rqt_console to ros2 (`#8 <https://github.com/ros-visualization/rqt_console/issues/8>`_)
+* flake8 (`#7 <https://github.com/ros-visualization/rqt_console/issues/7>`_)
+* autopep8 (`#6 <https://github.com/ros-visualization/rqt_console/issues/6>`_)
+* Contributors: Mike Lautman
+
 0.4.8 (2017-04-24)
 ------------------
 
