@@ -2,8 +2,8 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2018-12-11)
+------------------
 * porting rqt_console to ros2 (`#8 <https://github.com/ros-visualization/rqt_console/issues/8>`_)
 * flake8 (`#7 <https://github.com/ros-visualization/rqt_console/issues/7>`_)
 * autopep8 (`#6 <https://github.com/ros-visualization/rqt_console/issues/6>`_)
