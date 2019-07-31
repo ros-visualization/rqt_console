@@ -80,7 +80,7 @@ class Console(Plugin):
         self._timer.start(100)
 
         self._subscriber = None
-        self._topic = '/rosout_agg'
+        self._topic = '/rosout'
         self._subscribe(self._topic)
 
     def queue_message(self, log_msg):
@@ -100,7 +100,6 @@ class Console(Plugin):
         msg.message = log_msg.msg
         msg.severity = log_msg.level
         msg.node = log_msg.name
-        msg.stamp = (log_msg.header.stamp.sec, log_msg.header.stamp.nanosec)
         msg.location = log_msg.file + ':' + log_msg.function + ':' + str(log_msg.line)
         return msg
 
@@ -142,5 +141,5 @@ class Console(Plugin):
     def _subscribe(self, topic):
         if self._subscriber:
             self._context.node.destroy_subscription(self._subscriber)
-        self._subscriber = self._context.node.create_subscription(Log, topic, self.queue_message)
+        self._subscriber = self._context.node.create_subscription(Log, topic, self.queue_message, 10)
         self._currenttopic = topic
