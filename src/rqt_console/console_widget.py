@@ -96,14 +96,18 @@ class ConsoleWidget(QWidget):
         self.setObjectName('ConsoleWidget')
         self.table_view.setModel(proxy_model)
 
-        self._columnwidth = (60, 100, 70, 100, 100, 100, 100)
+
+        self._columnwidth = (60, 0, 70, 100, 100, 0, 100)
+        tmp = list(self._columnwidth)
+        tmp[1] = sum(self._columnwidth) - self.table_view.width()
+        self._columnwidth = tuple(tmp)
         for idx, width in enumerate(self._columnwidth):
             self.table_view.horizontalHeader().resizeSection(idx, width)
         try:
-            setSectionResizeMode = self.table_view.horizontalHeader().setSectionResizeMode  # Qt5
+            self.setSectionResizeMode = self.table_view.horizontalHeader().setSectionResizeMode  # Qt5
         except AttributeError:
-            setSectionResizeMode = self.table_view.horizontalHeader().setResizeMode  # Qt4
-        setSectionResizeMode(1, QHeaderView.Stretch)
+            self.setSectionResizeMode = self.table_view.horizontalHeader().setResizeMode  # Qt4
+        #setSectionResizeMode(1, QHeaderView.Stretch)
 
         def update_sort_indicator(logical_index, order):
             if logical_index == 0:
@@ -689,8 +693,7 @@ class ConsoleWidget(QWidget):
 
             if messages:
                 self._model.insert_rows(messages)
-
-                self._handle_pause_clicked(True)
+                self._handle_pause_clicked()
 
             return True
 
@@ -744,7 +747,10 @@ class ConsoleWidget(QWidget):
         self.record_button.setVisible(False)
 
     def _handle_column_resize_clicked(self):
+        self.setSectionResizeMode(1, QHeaderView.Stretch)
         self.table_view.resizeColumnsToContents()
+        self.setSectionResizeMode(1, QHeaderView.Interactive)
+
 
     def _delete_selected_rows(self):
         rowlist = []
