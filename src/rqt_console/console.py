@@ -125,12 +125,12 @@ class Console(Plugin):
         self._widget.restore_settings(plugin_settings, instance_settings)
 
     def trigger_configuration(self):
-        topics = [
+        topics = sorted([
             topic_name for topic_name, topic_types
             in self._context.node.get_topic_names_and_types()
-            if 'rcl_interfaces/Log' in topic_types]
+            if 'rcl_interfaces/msg/Log' in topic_types
+        ])
 
-        topics.sort(key=lambda tup: tup[0])
         dialog = ConsoleSettingsDialog(topics)
         (topic, message_limit) = dialog.query(self._topic, self._model.get_message_limit())
         if topic != self._topic:
