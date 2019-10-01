@@ -141,5 +141,8 @@ class Console(Plugin):
     def _subscribe(self, topic):
         if self._subscriber:
             self._context.node.destroy_subscription(self._subscriber)
-        self._subscriber = self._context.node.create_subscription(Log, topic, self.queue_message, 10)
+        from rclpy.qos import qos_profile_system_default
+        self._subscriber = self._context.node.create_subscription(
+            Log, topic, self.queue_message, qos_profile_system_default
+        )
         self._currenttopic = topic
