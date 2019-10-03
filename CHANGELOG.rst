@@ -2,8 +2,8 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2019-10-03)
+------------------
 * update for Dashing (`#10 <https://github.com/ros-visualization/rqt_console/issues/10>`_)
 
 1.0.1 (2018-12-12)
