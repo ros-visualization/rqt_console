@@ -33,6 +33,7 @@
 from rcl_interfaces.msg import Log
 
 import rclpy
+from rclpy.qos import qos_profile_system_default
 
 from python_qt_binding.QtCore import QMutex, QMutexLocker, QTimer
 
@@ -80,7 +81,7 @@ class Console(Plugin):
         self._timer.start(100)
 
         self._subscriber = None
-        self._topic = '/rosout_agg'
+        self._topic = '/rosout'
         self._subscribe(self._topic)
 
     def queue_message(self, log_msg):
@@ -100,7 +101,6 @@ class Console(Plugin):
         msg.message = log_msg.msg
         msg.severity = log_msg.level
         msg.node = log_msg.name
-        msg.stamp = (log_msg.header.stamp.sec, log_msg.header.stamp.nanosec)
         msg.location = log_msg.file + ':' + log_msg.function + ':' + str(log_msg.line)
         return msg
 
@@ -126,12 +126,12 @@ class Console(Plugin):
         self._widget.restore_settings(plugin_settings, instance_settings)
 
     def trigger_configuration(self):
-        topics = [
+        topics = sorted([
             topic_name for topic_name, topic_types
             in self._context.node.get_topic_names_and_types()
-            if 'rcl_interfaces/Log' in topic_types]
+            if 'rcl_interfaces/msg/Log' in topic_types
+        ])
 
-        topics.sort(key=lambda tup: tup[0])
         dialog = ConsoleSettingsDialog(topics)
         (topic, message_limit) = dialog.query(self._topic, self._model.get_message_limit())
         if topic != self._topic:
@@ -142,5 +142,7 @@ class Console(Plugin):
     def _subscribe(self, topic):
         if self._subscriber:
             self._context.node.destroy_subscription(self._subscriber)
-        self._subscriber = self._context.node.create_subscription(Log, topic, self.queue_message)
+        self._subscriber = self._context.node.create_subscription(
+            Log, topic, self.queue_message, qos_profile_system_default
+        )
         self._currenttopic = topic

@@ -62,7 +62,7 @@ class ConsoleSettingsDialog(QDialog):
 
         loadUi(ui_file, self)
         for topic in topics:
-            self.topic_combo.addItem(topic[0] + ' (' + topic[1] + ')', topic[0])
+            self.topic_combo.addItem(topic + ' (rcl_interfaces/msg/Log)', topic)
 
         # self._service_caller = LoggerLevelServiceCaller()
         # self._logger_widget = LoggerLevelWidget(self._service_caller)

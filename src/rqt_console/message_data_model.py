@@ -40,7 +40,7 @@ from .message_list import MessageList
 class MessageDataModel(QAbstractTableModel):
 
     # the column names must match the message attributes
-    columns = ['message', 'severity', 'node', 'stamp', 'topics', 'location']
+    columns = ['message', 'severity', 'node', 'stamp', 'location']
 
     severity_colors = {
         Message.DEBUG: QBrush(Qt.darkCyan),
