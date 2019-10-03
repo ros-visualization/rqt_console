@@ -2,6 +2,10 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update for Dashing (`#10 <https://github.com/ros-visualization/rqt_console/issues/10>`_)
+
 1.0.1 (2018-12-12)
 ------------------
 * remove unnecesary find_package call (`#9 <https://github.com/ros-visualization/rqt_console/issues/9>`_)
