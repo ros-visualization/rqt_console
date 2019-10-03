@@ -33,6 +33,7 @@
 from rcl_interfaces.msg import Log
 
 import rclpy
+from rclpy.qos import qos_profile_system_default
 
 from python_qt_binding.QtCore import QMutex, QMutexLocker, QTimer
 
@@ -141,7 +142,6 @@ class Console(Plugin):
     def _subscribe(self, topic):
         if self._subscriber:
             self._context.node.destroy_subscription(self._subscriber)
-        from rclpy.qos import qos_profile_system_default
         self._subscriber = self._context.node.create_subscription(
             Log, topic, self.queue_message, qos_profile_system_default
         )
