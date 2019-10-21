@@ -750,14 +750,17 @@ class ConsoleWidget(QWidget):
         self.table_view.resizeColumnsToContents()
 
     def _handle_column_right_click(self, pos):
-        column = self.table_view.horizontalHeader().logicalIndexAt(pos.x())
-
-        # show menu about the column
         menu = QMenu(self)
         hide = menu.addAction('Hide Column')
         showall = menu.addAction('Show all columns')
+
+        # Don't allow hiding the last column
+        if self.table_view.horizontalHeader().count() - self.table_view.horizontalHeader().hiddenSectionCount() == 1:
+            hide.setEnabled(False)
+
         ac = menu.exec_(self.table_view.horizontalHeader().mapToGlobal(pos))
         if ac == hide:
+            column = self.table_view.horizontalHeader().logicalIndexAt(pos.x())
             self.table_view.horizontalHeader().hideSection(column)
         elif ac == showall:
             for i in range(self.table_view.horizontalHeader().count()):
