@@ -1,4 +1,4 @@
-<package>
+<package format="3">
   <name>rqt_console</name>
   <version>0.4.8</version>
   <description>rqt_console provides a GUI plugin for displaying and filtering ROS messages.</description>
@@ -14,14 +14,15 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>python-rospkg</run_depend>
-  <run_depend version_gte="0.2.19">python_qt_binding</run_depend>
-  <run_depend>roslib</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>rqt_gui</run_depend>
-  <run_depend>rqt_gui_py</run_depend>
-  <run_depend>rqt_logger_level</run_depend>
-  <run_depend>rqt_py_common</run_depend>
+  <exec_depend condition="$ROS_PYTHON_VERSION == 2">python-rospkg</exec_depend>
+  <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-rospkg</exec_depend>
+  <exec_depend version_gte="0.2.19">python_qt_binding</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>rqt_gui</exec_depend>
+  <exec_depend>rqt_gui_py</exec_depend>
+  <exec_depend>rqt_logger_level</exec_depend>
+  <exec_depend>rqt_py_common</exec_depend>
 
   <export>
     <architecture_independent/>
