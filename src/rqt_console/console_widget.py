@@ -51,7 +51,6 @@ from .filters.message_filter import MessageFilter
 from .filters.node_filter import NodeFilter
 from .filters.severity_filter import SeverityFilter
 from .filters.time_filter import TimeFilter
-from .filters.topic_filter import TopicFilter
 
 from .filters.custom_filter_widget import CustomFilterWidget
 from .filters.filter_wrapper_widget import FilterWrapperWidget
@@ -156,7 +155,7 @@ class ConsoleWidget(QWidget):
         # provides filtering logic index 2 is the widget that sets the data in the
         # filter class, index 3 are the arguments for the widget class constructor
         self._filter_factory_order = [
-            'message', 'severity', 'node', 'time', 'topic', 'location', 'custom']
+            'message', 'severity', 'node', 'time', 'location', 'custom']
         self.filter_factory = {
             'message': (
                 self.tr('...containing'),
@@ -177,11 +176,6 @@ class ConsoleWidget(QWidget):
                 TimeFilter,
                 TimeFilterWidget,
                 self.get_time_range_from_selection),
-            'topic': (
-                self.tr('...from topic'),
-                TopicFilter,
-                ListFilterWidget,
-                self._model.get_unique_topics),
             'location': (
                 self.tr('...from location'),
                 LocationFilter,
@@ -191,8 +185,7 @@ class ConsoleWidget(QWidget):
                 CustomFilter,
                 CustomFilterWidget,
                 [self._model.get_severity_dict,
-                 self._model.get_unique_nodes,
-                 self._model.get_unique_topics])}
+                 self._model.get_unique_nodes])}
 
         self._model.rowsInserted.connect(self.update_status)
         self._model.rowsRemoved.connect(self.update_status)
@@ -422,7 +415,6 @@ class ConsoleWidget(QWidget):
         """
         types = {
             self.tr('Node'): 2,
-            self.tr('Topic'): 4,
             self.tr('Severity'): 1,
             self.tr('Message'): 0}
         try:
@@ -492,17 +484,14 @@ class ConsoleWidget(QWidget):
             if severity in self._model.get_unique_severities():
                 severities[severity] = label
         nodes = sorted(self._model.get_unique_nodes())
-        topics = sorted(self._model.get_unique_topics())
 
         # menutext entries turned into
         menutext = []
         menutext.append([self.tr('Exclude'), [[self.tr('Severity'), severities],
                                               [self.tr('Node'), nodes],
-                                              [self.tr('Topic'), topics],
                                               [self.tr('Selected Message(s)')]]])
         menutext.append([self.tr('Highlight'), [[self.tr('Severity'), severities],
                                                 [self.tr('Node'), nodes],
-                                                [self.tr('Topic'), topics],
                                                 [self.tr('Selected Message(s)')]]])
         menutext.append([self.tr('Copy Selected')])
         menutext.append([self.tr('Browse Selected')])
@@ -551,7 +540,7 @@ class ConsoleWidget(QWidget):
             else:
                 raise RuntimeError("Menu format corruption in ConsoleWidget._rightclick_menu()")
         else:
-            # This processes the dynamic list entries (severity, node and topic)
+            # This processes the dynamic list entries (severity and node)
             try:
                 roottitle = action.parentWidget().parentWidget().title()
             except:
@@ -674,7 +663,8 @@ class ConsoleWidget(QWidget):
                             break
                         msg.stamp = (int(parts[0]), int(parts[1]))
                     elif column == 'topics':
-                        msg.topics = value.split(',')
+                        # ignore column from files written by ROS 1
+                        pass
                     elif column == 'node':
                         msg.node = value
                     elif column == 'location':
@@ -724,7 +714,6 @@ class ConsoleWidget(QWidget):
                     data['severity'] = str(msg.severity)
                     data['node'] = msg.node
                     data['stamp'] = str(msg.stamp[0]) + '.' + str(msg.stamp[1]).zfill(9)
-                    data['topics'] = ','.join(msg.topics)
                     data['location'] = msg.location
                     line = []
                     for column in MessageDataModel.columns:

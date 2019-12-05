@@ -87,9 +87,6 @@ class MessageDataModel(QAbstractTableModel):
                     # map severity enum to label
                     if role == Qt.DisplayRole and column == 'severity':
                         data = Message.SEVERITY_LABELS[data]
-                    # implode topic names
-                    if column == 'topics':
-                        data = ', '.join(data)
                     # append row number to define strict order
                     if role == Qt.UserRole:
                         # append row number to define strict order
@@ -116,8 +113,6 @@ class MessageDataModel(QAbstractTableModel):
                 if role == Qt.ToolTipRole and column != 'severity':
                     if column == 'stamp':
                         data = msg.get_stamp_string()
-                    elif column == 'topics':
-                        data = ', '.join(msg.topics)
                     else:
                         data = getattr(msg, column)
                     # <font> tag enables word wrap by forcing rich text
@@ -245,13 +240,6 @@ class MessageDataModel(QAbstractTableModel):
         for message in self._messages:
             severities.add(message.severity)
         return severities
-
-    def get_unique_topics(self):
-        topics = set()
-        for message in self._messages:
-            for topic in message.topics:
-                topics.add(topic)
-        return topics
 
     def get_severity_dict(self):
         return Message.SEVERITY_LABELS
