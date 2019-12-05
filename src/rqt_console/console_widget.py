@@ -693,6 +693,7 @@ class ConsoleWidget(QWidget):
 
             if messages:
                 self._model.insert_rows(messages)
+
                 self._handle_pause_clicked()
 
             return True
