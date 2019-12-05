@@ -57,7 +57,7 @@ class CustomFilterWidget(QWidget):
         self._parentfilter = parentfilter  # When data is changed it is stored in the parent filter
 
         # keep color for highlighted items even when not active
-        for list_widget in [self.severity_list, self.node_list, self.topic_list]:
+        for list_widget in [self.severity_list, self.node_list]:
             active_color = list_widget.palette().brush(
                 QPalette.Active, QPalette.Highlight).color().name()
             list_widget.setStyleSheet(
@@ -80,17 +80,10 @@ class CustomFilterWidget(QWidget):
         self._node_list_populate_function = item_providers[1]
         self.node_list.itemSelectionChanged.connect(self.handle_node_item_changed)
 
-        # Topic Filter Initialization
-        self._topic_list_populate_function = item_providers[2]
-        self.topic_list.itemSelectionChanged.connect(self.handle_topic_item_changed)
-
         self.repopulate()
 
     def handle_node_item_changed(self):
         self._parentfilter._node.set_selected_items(self.node_list.selectedItems())
-
-    def handle_topic_item_changed(self):
-        self._parentfilter._topic.set_selected_items(self.topic_list.selectedItems())
 
     def handle_severity_item_changed(self):
         self._parentfilter._severity.set_selected_items(self.severity_list.selectedItems())
@@ -106,11 +99,6 @@ class CustomFilterWidget(QWidget):
         Repopulates the display widgets based on the function arguments passed
         in during initialization
         """
-        newset = self._topic_list_populate_function()
-        for item in newset:
-            if len(self.topic_list.findItems(item, Qt.MatchExactly)) == 0:
-                self._add_item(self.topic_list, item)
-
         newset = self._node_list_populate_function()
         for item in newset:
             if len(self.node_list.findItems(item, Qt.MatchExactly)) == 0:
@@ -135,8 +123,6 @@ class CustomFilterWidget(QWidget):
         settings.set_value('regex', self._parentfilter._message._regex)
 
         settings.set_value('severityitemlist', pack(self._parentfilter._severity._selected_items))
-
-        settings.set_value('topicitemlist', pack(self._parentfilter._topic._selected_items))
 
         settings.set_value('nodeitemlist', pack(self._parentfilter._node._selected_items))
 
@@ -164,18 +150,6 @@ class CustomFilterWidget(QWidget):
             for item in items:
                 item.setSelected(True)
         self.handle_severity_item_changed()
-
-        # Restore Topics
-        for index in range(self.topic_list.count()):
-            self.topic_list.item(index).setSelected(False)
-        topic_item_list = unpack(settings.value('topicitemlist'))
-        for item in topic_item_list:
-            if len(self.topic_list.findItems(item, Qt.MatchExactly)) == 0:
-                self.topic_list.addItem(item)
-            items = self.topic_list.findItems(item, Qt.MatchExactly)
-            for item in items:
-                item.setSelected(True)
-        self.handle_topic_item_changed()
 
         # Restore Nodes
         for index in range(self.node_list.count()):

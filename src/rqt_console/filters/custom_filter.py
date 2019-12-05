@@ -34,14 +34,13 @@ from .base_filter import BaseFilter
 from .message_filter import MessageFilter
 from .node_filter import NodeFilter
 from .severity_filter import SeverityFilter
-from .topic_filter import TopicFilter
 
 
 class CustomFilter(BaseFilter):
 
     """
-    Contains filter logic for the custom filter which allows message, severity,
-    node and topic filtering simultaniously. All of these filters must match
+    Contains filter logic for the custom filter which allows message, severity
+    and node filtering simultaniously. All of these filters must match
     together (if they are used) or the custom filter does not match.
     """
 
@@ -51,9 +50,8 @@ class CustomFilter(BaseFilter):
         self._message = MessageFilter()
         self._severity = SeverityFilter()
         self._node = NodeFilter()
-        self._topic = TopicFilter()
 
-        self._all_filters = [self._message, self._severity, self._node, self._topic]
+        self._all_filters = [self._message, self._severity, self._node]
         for f in self._all_filters:
             f.filter_changed_signal.connect(self._relay_signal)
 
