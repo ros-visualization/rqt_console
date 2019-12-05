@@ -111,6 +111,9 @@ class ConsoleWidget(QWidget):
             self.table_view.horizontalHeader().setSortIndicatorShown(logical_index != 0)
         self.table_view.horizontalHeader().sortIndicatorChanged.connect(update_sort_indicator)
 
+        self.table_view.horizontalHeader().setContextMenuPolicy(Qt.CustomContextMenu)
+        self.table_view.horizontalHeader().customContextMenuRequested.connect(self._handle_column_right_click)
+
         self.add_exclude_button.setIcon(QIcon.fromTheme('list-add'))
         self.add_highlight_button.setIcon(QIcon.fromTheme('list-add'))
         self.pause_button.setIcon(QIcon.fromTheme('media-playback-pause'))
@@ -745,6 +748,23 @@ class ConsoleWidget(QWidget):
 
     def _handle_column_resize_clicked(self):
         self.table_view.resizeColumnsToContents()
+
+    def _handle_column_right_click(self, pos):
+        menu = QMenu(self)
+        hide = menu.addAction('Hide Column')
+        showall = menu.addAction('Show all columns')
+
+        # Don't allow hiding the last column
+        if self.table_view.horizontalHeader().count() - self.table_view.horizontalHeader().hiddenSectionCount() == 1:
+            hide.setEnabled(False)
+
+        ac = menu.exec_(self.table_view.horizontalHeader().mapToGlobal(pos))
+        if ac == hide:
+            column = self.table_view.horizontalHeader().logicalIndexAt(pos.x())
+            self.table_view.horizontalHeader().hideSection(column)
+        elif ac == showall:
+            for i in range(self.table_view.horizontalHeader().count()):
+                self.table_view.horizontalHeader().showSection(i)
 
     def _delete_selected_rows(self):
         rowlist = []
