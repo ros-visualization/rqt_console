@@ -444,7 +444,7 @@ class ConsoleWidget(QWidget):
                     filter_widget = self._exclude_filters[filter_index][1].findChildren(
                         QWidget, QRegExp('.*FilterWidget.*'))[0]
                 else:
-                    filter_index = self._add_highlight_filter(col)
+                    filter_index = self._add_highlight_filter(selectiontype.lower())
                     filter_widget = self._highlight_filters[filter_index][1].findChildren(
                         QWidget, QRegExp('.*FilterWidget.*'))[0]
                 filter_widget.set_regex(False)
