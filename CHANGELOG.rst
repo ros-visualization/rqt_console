@@ -2,6 +2,17 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix division in Python 3 (`#18 <https://github.com/ros-visualization/rqt_console/issues/18>`_)
+* fix highlight filter by message (`#17 <https://github.com/ros-visualization/rqt_console/issues/17>`_)
+* fix exclude messages (`#11 <https://github.com/ros-visualization/rqt_console/issues/11>`_)
+* add context menu for hiding and showing columns (`#13 <https://github.com/ros-visualization/rqt_console/issues/13>`_)
+* fix handle_pause_clicked doesn't need args (`#15 <https://github.com/ros-visualization/rqt_console/issues/15>`_)
+* add Python 3 conditional dependencies (`#14 <https://github.com/ros-visualization/rqt_console/issues/14>`_)
+* flake8 (`#7 <https://github.com/ros-visualization/rqt_console/issues/7>`_)
+* autopep8 (`#6 <https://github.com/ros-visualization/rqt_console/issues/6>`_)
+
 0.4.8 (2017-04-24)
 ------------------
 
