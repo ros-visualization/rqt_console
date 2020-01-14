@@ -2,8 +2,8 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.1 (2020-01-14)
+------------------
 * fix division in Python 3 (`#18 <https://github.com/ros-visualization/rqt_console/issues/18>`_)
 * fix highlight filter by message (`#17 <https://github.com/ros-visualization/rqt_console/issues/17>`_)
 * fix exclude messages (`#11 <https://github.com/ros-visualization/rqt_console/issues/11>`_)
