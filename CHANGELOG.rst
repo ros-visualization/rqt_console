@@ -2,6 +2,15 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix division in Python 3 (`#18 <https://github.com/ros-visualization/rqt_console/issues/18>`_)
+* fix highlight filter by message (`#17 <https://github.com/ros-visualization/rqt_console/issues/17>`_)
+* fix exclude messages (`#11 <https://github.com/ros-visualization/rqt_console/issues/11>`_)
+* add context menu for hiding and showing columns (`#13 <https://github.com/ros-visualization/rqt_console/issues/13>`_)
+* remove topics concept which has been removed in ROS 2 (`#16 <https://github.com/ros-visualization/rqt_console/issues/16>`_)
+* fix handle_pause_clicked doesn't need args (`#15 <https://github.com/ros-visualization/rqt_console/issues/15>`_)
+
 1.1.0 (2019-10-03)
 ------------------
 * update for Dashing (`#10 <https://github.com/ros-visualization/rqt_console/issues/10>`_)
