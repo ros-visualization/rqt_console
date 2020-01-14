@@ -430,7 +430,7 @@ class ConsoleWidget(QWidget):
             unique_messages = set()
             selected_indexes = self.table_view.selectionModel().selectedIndexes()
             colcount = len(MessageDataModel.columns) + 1
-            num_selected = len(selected_indexes) / colcount
+            num_selected = len(selected_indexes) // colcount
             for index in range(num_selected):
                 unique_messages.add(selected_indexes[(index * colcount) + 1].data())
             unique_messages = list(unique_messages)
