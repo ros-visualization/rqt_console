@@ -429,13 +429,12 @@ class ConsoleWidget(QWidget):
         if col == 0:
             unique_messages = set()
             selected_indexes = self.table_view.selectionModel().selectedIndexes()
-            num_selected = len(selected_indexes) / 6
+            colcount = len(MessageDataModel.columns) + 1
+            num_selected = len(selected_indexes) / colcount
             for index in range(num_selected):
-                unique_messages.add(selected_indexes[num_selected * col + index].data())
+                unique_messages.add(selected_indexes[(index * colcount) + 1].data())
             unique_messages = list(unique_messages)
             for message in unique_messages:
-                message = message.replace('\\', '\\\\')
-                message = message.replace('.', '\\.')
                 if exclude:
                     filter_index = self._add_exclude_filter(selectiontype.lower())
                     filter_widget = self._exclude_filters[filter_index][1].findChildren(
@@ -444,8 +443,8 @@ class ConsoleWidget(QWidget):
                     filter_index = self._add_highlight_filter(col)
                     filter_widget = self._highlight_filters[filter_index][1].findChildren(
                         QWidget, QRegExp('.*FilterWidget.*'))[0]
-                filter_widget.set_regex(True)
-                filter_widget.set_text('^' + message + '$')
+                filter_widget.set_regex(False)
+                filter_widget.set_text(message)
 
         else:
             if exclude:
