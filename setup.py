@@ -26,8 +26,8 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    author='Dan Lazewatsky',
-    maintainer='Dirk Thomas, Dan Lazewatsky',
+    author='Aaron Blasdel',
+    maintainer='Dirk Thomas, Aaron Blasdel',
     maintainer_email='dthomas@osrfoundation.org',
     keywords=['ROS'],
     classifiers=[
