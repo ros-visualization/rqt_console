@@ -1,4 +1,3 @@
-from setuptools import find_packages
 from setuptools import setup
 
 package_name = 'rqt_console'
@@ -6,7 +5,7 @@ package_name = 'rqt_console'
 setup(
     name=package_name,
     version='1.1.1',
-    packages=[package_name],
+    packages=[package_name, package_name + '/filters'],
     package_dir={'': 'src'},
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -18,7 +17,7 @@ setup(
         ('share/' + package_name + '/resource/filters',
             ['resource/filters/custom_filter_widget.ui',
              'resource/filters/filter_wrapper_widget.ui',
-             'resource/filters/custom_filter_widget.ui',
+             'resource/filters/list_filter_widget.ui',
              'resource/filters/text_filter_widget.ui',
              'resource/filters/time_filter_widget.ui']),
         ('share/' + package_name, ['package.xml']),
@@ -32,7 +31,7 @@ setup(
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
         'Topic :: Software Development',
     ],
