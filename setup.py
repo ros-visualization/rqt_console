@@ -36,7 +36,7 @@ setup(
         'Topic :: Software Development',
     ],
     description=(
-        'RQT plugin for monitoring ROS processes.'
+        'rqt_console provides a GUI plugin for displaying and filtering ROS messages.'
     ),
     license='BSD',
     entry_points={
