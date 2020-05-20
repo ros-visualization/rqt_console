@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use catkin_install_python() (`#23 <https://github.com/ros-visualization/rqt_console/issues/23>`_)
+* bump CMake minimum version to avoid CMP0048 warning
+
 0.4.9 (2020-01-14)
 ------------------
 * fix division in Python 3 (`#18 <https://github.com/ros-visualization/rqt_console/issues/18>`_)
