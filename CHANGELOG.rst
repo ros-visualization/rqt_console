@@ -2,6 +2,10 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* readd rqt_console global executable, regression from 0.4.10 (`#24 <https://github.com/ros-visualization/rqt_console/issues/24>`_)
+
 0.4.10 (2020-05-20)
 -------------------
 * use catkin_install_python() (`#23 <https://github.com/ros-visualization/rqt_console/issues/23>`_)
