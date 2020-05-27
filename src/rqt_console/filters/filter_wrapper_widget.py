@@ -58,6 +58,12 @@ class FilterWrapperWidget(QWidget):
         ui_file = os.path.join(
             package_path, 'share', pkg_name, 'resource', 'filters', 'filter_wrapper_widget.ui')
 
+        icon_paths = QIcon.themeSearchPaths()
+        icon_paths.append(os.path.join(
+            package_path, 'share', pkg_name, 'resource', 'icons', 'rqt_icons'))
+        QIcon.setThemeSearchPaths(icon_paths)
+        QIcon.setThemeName('rqt_icons')
+
         loadUi(ui_file, self)
         self.setObjectName('FilterWrapperWidget')
         self.delete_button.setIcon(QIcon.fromTheme('list-remove'))

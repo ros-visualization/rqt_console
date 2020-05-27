@@ -30,6 +30,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
+from ament_index_python.resources import get_resource
+
 from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt, qWarning
 from python_qt_binding.QtGui import QBrush, QIcon
 
@@ -54,6 +58,15 @@ class MessageDataModel(QAbstractTableModel):
         super(MessageDataModel, self).__init__()
         self._messages = MessageList()
         self._message_limit = 20000
+
+        pkg_name = 'rqt_console'
+        _, package_path = get_resource('packages', pkg_name)
+        icon_paths = QIcon.themeSearchPaths()
+        icon_paths.append(os.path.join(
+            package_path, 'share', pkg_name, 'resource', 'icons', 'rqt_icons'))
+        QIcon.setThemeSearchPaths(icon_paths)
+        QIcon.setThemeName('rqt_icons')
+
         self._info_icon = QIcon.fromTheme('dialog-information')
         self._warning_icon = QIcon.fromTheme('dialog-warning')
         self._error_icon = QIcon.fromTheme('dialog-error')

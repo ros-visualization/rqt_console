@@ -92,6 +92,12 @@ class ConsoleWidget(QWidget):
 
         loadUi(ui_file, self)
 
+        icon_paths = QIcon.themeSearchPaths()
+        icon_paths.append(os.path.join(
+            package_path, 'share', pkg_name, 'resource', 'icons', 'rqt_icons'))
+        QIcon.setThemeSearchPaths(icon_paths)
+        QIcon.setThemeName('rqt_icons')
+
         if minimal:
             self.load_button.hide()
             self.save_button.hide()
