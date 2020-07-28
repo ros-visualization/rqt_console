@@ -5,7 +5,7 @@ package_name = 'rqt_console'
 setup(
     name=package_name,
     version='1.1.1',
-    packages=[package_name, package_name + '/filters'],
+    packages=find_packages(),
     package_dir={'': 'src'},
     data_files=[
         ('share/ament_index/resource_index/packages',
