@@ -1,3 +1,4 @@
+from setuptools import find_packages
 from setuptools import setup
 
 package_name = 'rqt_console'
@@ -6,7 +7,6 @@ setup(
     name=package_name,
     version='1.1.1',
     packages=find_packages(),
-    package_dir={'': 'src'},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
