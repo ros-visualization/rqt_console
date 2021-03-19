@@ -2,6 +2,13 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix regression introduced in `#21 <https://github.com/ros-visualization/rqt_console/issues/21>`_ (`#28 <https://github.com/ros-visualization/rqt_console/issues/28>`_)
+* Changed the build type to ament_python and added setup.cfg (`#21 <https://github.com/ros-visualization/rqt_console/issues/21>`_)
+  * Also fixed package to run with ros2 run
+* Contributors: Alejandro Hernández Cordero
+
 1.1.1 (2020-01-14)
 ------------------
 * fix division in Python 3 (`#18 <https://github.com/ros-visualization/rqt_console/issues/18>`_)
