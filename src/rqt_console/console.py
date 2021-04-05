@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
 from rcl_interfaces.msg import Log
 
 import rclpy
@@ -44,6 +46,7 @@ from rqt_console.console_widget import ConsoleWidget
 from rqt_console.message import Message
 from rqt_console.message_data_model import MessageDataModel
 from rqt_console.message_proxy_model import MessageProxyModel
+from rqt_gui_py.rclpy_spinner import RclpySpinner
 
 
 class Console(Plugin):
@@ -82,6 +85,13 @@ class Console(Plugin):
 
         self._subscriber = None
         self._topic = '/rosout'
+
+        # Create a ROS node to handle the subscriptions
+        self._local_node = rclpy.create_node('rqt_console_plugin_%d' % os.getpid(),
+                                             start_parameter_services=False)
+        self._spinner = RclpySpinner(self._local_node)
+        self._spinner.start()
+
         self._subscribe(self._topic)
 
     def queue_message(self, log_msg):
@@ -115,8 +125,12 @@ class Console(Plugin):
             self._model.insert_rows(msgs)
 
     def shutdown_plugin(self):
-        self._context.node.destroy_subscription(self._subscriber)
         self._timer.stop()
+
+        self._spinner.quit()
+        self._spinner.wait(msecs=2000)  # Wait for the _spinner (a QThread) to finish
+        self._local_node.destroy_node()
+
         self._widget.cleanup_browsers_on_close()
 
     def save_settings(self, plugin_settings, instance_settings):
@@ -141,8 +155,8 @@ class Console(Plugin):
 
     def _subscribe(self, topic):
         if self._subscriber:
-            self._context.node.destroy_subscription(self._subscriber)
-        self._subscriber = self._context.node.create_subscription(
+            self._local_node.destroy_subscription(self._subscriber)
+        self._subscriber = self._local_node.create_subscription(
             Log, topic, self.queue_message, qos_profile_system_default
         )
         self._currenttopic = topic
