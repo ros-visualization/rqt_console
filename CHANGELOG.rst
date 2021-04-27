@@ -2,8 +2,8 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.1 (2021-04-27)
+------------------
 * Use underscores in setup.cfg instead of dashes (`#31 <https://github.com/ros-visualization/rqt_console/issues/31>`_)
 * Contributors: Michel Hidalgo
 

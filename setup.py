@@ -4,7 +4,7 @@ package_name = 'rqt_console'
 
 setup(
     name=package_name,
-    version='2.0.0',
+    version='2.0.1',
     packages=[package_name, package_name + '.filters'],
     package_dir={'': 'src'},
     data_files=[
