@@ -125,7 +125,7 @@ class Message(QObject):
         text += self.tr('Time: ') + self.get_stamp_string() + '\n'
         text += self.tr('Severity: ') + Message.SEVERITY_LABELS[self.severity] + '\n'
         text += self.tr('Published Topics: ') + ', '.join(self.topics) + '\n'
-        text += '\n' + self.message + '\n'
+        text += '\n' + self.message.decode('utf-8') + '\n'
         text += '\n' + 'Location:'
         text += '\n' + self.location + '\n\n'
         text += '-' * 100 + '\n\n'
