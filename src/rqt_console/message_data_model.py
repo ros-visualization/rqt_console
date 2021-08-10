@@ -121,7 +121,7 @@ class MessageDataModel(QAbstractTableModel):
                     else:
                         data = getattr(msg, column)
                     # <font> tag enables word wrap by forcing rich text
-                    return '<font>' + data + '<br/><br/>' + \
+                    return '<font>' + data.decode('utf-8') + '<br/><br/>' + \
                         self.tr('Right click for menu.') + '</font>'
 
     def headerData(self, section, orientation, role=None):
