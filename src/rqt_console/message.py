@@ -34,6 +34,9 @@ from rosgraph_msgs.msg import Log
 
 from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
+# This is needed to check the python version in order to
+# solve https://github.com/ros-visualization/rqt_console/issues/33 
+from sys import version_info
 
 class Message(QObject):
 
@@ -125,7 +128,11 @@ class Message(QObject):
         text += self.tr('Time: ') + self.get_stamp_string() + '\n'
         text += self.tr('Severity: ') + Message.SEVERITY_LABELS[self.severity] + '\n'
         text += self.tr('Published Topics: ') + ', '.join(self.topics) + '\n'
-        text += '\n' + self.message.decode('utf-8') + '\n'
+        # Python version is checked here in order to solve 
+        # https://github.com/ros-visualization/rqt_console/issues/33
+        # Python 2 requres the data to be decoded to avoid crash when the string contains
+        # non-ascii characters. In Python 3 and above, this is not an issue
+        text += '\n' + self.message.decode('utf-8') if version_info[0] < 3 else self.message + '\n'
         text += '\n' + 'Location:'
         text += '\n' + self.location + '\n\n'
         text += '-' * 100 + '\n\n'
