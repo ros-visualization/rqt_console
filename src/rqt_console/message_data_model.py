@@ -36,6 +36,9 @@ from python_qt_binding.QtGui import QBrush, QIcon
 from .message import Message
 from .message_list import MessageList
 
+# This is needed to check the python version in order to
+# solve https://github.com/ros-visualization/rqt_console/issues/33 
+from sys import version_info
 
 class MessageDataModel(QAbstractTableModel):
 
@@ -121,7 +124,11 @@ class MessageDataModel(QAbstractTableModel):
                     else:
                         data = getattr(msg, column)
                     # <font> tag enables word wrap by forcing rich text
-                    return '<font>' + data.decode('utf-8') + '<br/><br/>' + \
+                    # Python version is checked here in order to solve 
+                    # https://github.com/ros-visualization/rqt_console/issues/33
+                    # Python 2 requres the data to be decoded to avoid crash when the string contains
+                    # non-ascii characters. In Python 3 and above, this is not an issue
+                    return '<font>' + data.decode('utf-8') if version_info[0] < 3 else data + '<br/><br/>' + \
                         self.tr('Right click for menu.') + '</font>'
 
     def headerData(self, section, orientation, role=None):
