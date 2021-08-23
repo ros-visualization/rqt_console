@@ -126,7 +126,7 @@ class MessageDataModel(QAbstractTableModel):
                     # <font> tag enables word wrap by forcing rich text
                     # Python version is checked here in order to solve 
                     # https://github.com/ros-visualization/rqt_console/issues/33
-                    # Python 2 requres the data to be decoded to avoid crash when the string contains
+                    # Python 2 requires the data to be decoded to avoid crash when the string contains
                     # non-ascii characters. In Python 3 and above, this is not an issue
                     return '<font>' + data.decode('utf-8') if version_info[0] < 3 else data + '<br/><br/>' + \
                         self.tr('Right click for menu.') + '</font>'
