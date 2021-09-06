@@ -2,6 +2,10 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.12 (2021-09-06)
+-------------------
+* fixed decoding when parsing strings containing Japanese characters [only affects python 2.7] (`#34 <https://github.com/ros-visualization/rqt_console/issues/34>`_)
+
 0.4.11 (2020-05-22)
 -------------------
 * readd rqt_console global executable, regression from 0.4.10 (`#24 <https://github.com/ros-visualization/rqt_console/issues/24>`_)
