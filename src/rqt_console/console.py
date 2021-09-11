@@ -33,7 +33,7 @@
 from rcl_interfaces.msg import Log
 
 import rclpy
-from rclpy.qos import qos_profile_system_default
+from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSDurabilityPolicy
 
 from python_qt_binding.QtCore import QMutex, QMutexLocker, QTimer
 
@@ -79,6 +79,13 @@ class Console(Plugin):
         self._timer = QTimer()
         self._timer.timeout.connect(self.insert_messages)
         self._timer.start(100)
+        self._qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
+            history=QoSHistoryPolicy.SYSTEM_DEFAULT,
+            liveliness=QoSLivelinessPolicy.AUTOMATIC,
+            depth=10
+        )
 
         self._subscriber = None
         self._topic = '/rosout'
@@ -143,6 +150,6 @@ class Console(Plugin):
         if self._subscriber:
             self._context.node.destroy_subscription(self._subscriber)
         self._subscriber = self._context.node.create_subscription(
-            Log, topic, self.queue_message, qos_profile_system_default
+            Log, topic, self.queue_message, self._qos
         )
         self._currenttopic = topic
