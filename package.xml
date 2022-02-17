@@ -4,6 +4,7 @@
   <description>rqt_console provides a GUI plugin for displaying and filtering ROS messages.</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <maintainer email="ablasdel@gmail.com">Aaron Blasdel</maintainer>
+  <maintainer email="arne.hitzmann@gmail.com">Arne Hitzmann</maintainer>
   <author>Aaron Blasdel</author>
 
   <license>BSD</license>
