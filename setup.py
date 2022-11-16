@@ -26,8 +26,8 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     author='Aaron Blasdel',
-    maintainer='Dirk Thomas, Aaron Blasdel',
-    maintainer_email='dthomas@osrfoundation.org',
+    maintainer='Dharini Dutia',
+    maintainer_email='dharini@openrobotics.org',
     keywords=['ROS'],
     classifiers=[
         'Intended Audience :: Developers',
