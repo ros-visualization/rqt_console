@@ -2,8 +2,8 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.1.1 (2023-02-14)
+------------------
 * [rolling] Update maintainers - 2022-11-07 (`#39 <https://github.com/ros-visualization/rqt_console/issues/39>`_)
 * Contributors: Arne Hitzmann, Audrow Nash
 
