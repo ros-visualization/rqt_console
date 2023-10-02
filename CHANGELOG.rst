@@ -2,6 +2,12 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.12 (2023-10-02)
+-------------------
+* added LICENSE file
+* Import setup from setuptools instead of distutils.core
+* Add xml-model
+
 0.4.11 (2020-05-22)
 -------------------
 * readd rqt_console global executable, regression from 0.4.10 (`#24 <https://github.com/ros-visualization/rqt_console/issues/24>`_)
