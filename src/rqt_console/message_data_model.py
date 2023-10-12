@@ -30,15 +30,84 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import re
+
 from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt, qWarning
-from python_qt_binding.QtGui import QBrush, QIcon
+from python_qt_binding.QtGui import QBrush, QIcon, QFont, QColor
 
 from .message import Message
 from .message_list import MessageList
 
 
-class MessageDataModel(QAbstractTableModel):
+def ansi_background(data):
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if 40 <= attribute <= 47:
+            color_index = attribute - 40
+            if color_index == 0:
+                color = Qt.black
+            elif color_index == 1:
+                color = Qt.red
+            elif color_index == 2:
+                color = Qt.green
+            elif color_index == 3:
+                color = Qt.yellow
+            elif color_index == 4:
+                color = Qt.blue
+            elif color_index == 5:
+                color = Qt.magenta
+            elif color_index == 6:
+                color = Qt.cyan
+            elif color_index == 7:
+                color = Qt.white
+            else:
+                raise NotImplementedError()
+            return QColor(color)
+    return None
 
+
+def ansi_font_properties(data):
+    font = QFont()
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if attribute == 1:
+            font.setBold(True)
+    return font
+
+
+def ansi_foreground(data):
+    # returns the foreground color to be used for data
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if 30 <= attribute <= 37:
+            color_index = attribute - 30
+            if color_index == 0:
+                color = Qt.black
+            elif color_index == 1:
+                color = Qt.red
+            elif color_index == 2:
+                color = Qt.green
+            elif color_index == 3:
+                color = Qt.yellow
+            elif color_index == 4:
+                color = Qt.blue
+            elif color_index == 5:
+                color = Qt.magenta
+            elif color_index == 6:
+                color = Qt.cyan
+            elif color_index == 7:
+                color = Qt.white
+            else:
+                raise NotImplementedError()
+            return QBrush(color)
+    return None
+
+
+def filter_ansi_codes(data):
+    return re.sub(r"\x1b\[(?P<int>\d+)m", "", data)
+
+
+class MessageDataModel(QAbstractTableModel):
     # the column names must match the message attributes
     columns = ['message', 'severity', 'node', 'stamp', 'topics', 'location']
 
@@ -87,6 +156,9 @@ class MessageDataModel(QAbstractTableModel):
                     # map severity enum to label
                     if role == Qt.DisplayRole and column == 'severity':
                         data = Message.SEVERITY_LABELS[data]
+                    # remove ansii codes
+                    if column == 'message':
+                        data = filter_ansi_codes(data)
                     # implode topic names
                     if column == 'topics':
                         data = ', '.join(data)
@@ -123,6 +195,17 @@ class MessageDataModel(QAbstractTableModel):
                     # <font> tag enables word wrap by forcing rich text
                     return '<font>' + data + '<br/><br/>' + \
                         self.tr('Right click for menu.') + '</font>'
+
+                # handle some of the ANSI codes
+                if role == Qt.ForegroundRole and column == 'message':
+                    data = ansi_foreground(msg.message)
+                    return data
+                if role == Qt.FontRole and column == 'message':
+                    data = ansi_font_properties(msg.message)
+                    return data
+                if role == Qt.BackgroundRole and column == 'message':
+                    data = ansi_background(msg.message)
+                    return data
 
     def headerData(self, section, orientation, role=None):
         if role is None:
