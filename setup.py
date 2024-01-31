@@ -39,6 +39,7 @@ setup(
         'rqt_console provides a GUI plugin for displaying and filtering ROS messages.'
     ),
     license='BSD',
+    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'rqt_console = ' + package_name + '.main:main',
