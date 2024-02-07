@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add a test dependency on pytest. (`#45 <https://github.com/ros-visualization/rqt_console/issues/45>`_)
+* Contributors: Arne Hitzmann, Chris Lalancette
+
 2.2.0 (2023-04-28)
 ------------------
 
