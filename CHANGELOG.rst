@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.3 (2024-02-16)
+------------------
+* added new maintainer
+* Contributors: Arne Hitzmann
+
 2.0.2 (2021-10-27)
 ------------------
 * Use a custom QoS profile based on the default rosout QoS profile (`#37 <https://github.com/ros-visualization/rqt_console/issues/37>`_)
