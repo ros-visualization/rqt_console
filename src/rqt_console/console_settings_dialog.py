@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -37,19 +35,14 @@ from ament_index_python.resources import get_resource
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QDialog
 
-# TODO(mlautman): Restore this functionality once rqt_logger_level has been ported
-# from rqt_logger_level.logger_level_widget import LoggerLevelWidget
-# from rqt_logger_level.logger_level_service_caller import LoggerLevelServiceCaller
-
 
 class ConsoleSettingsDialog(QDialog):
-
-    """
-    Dialog to change the subscribed topic and alter the message buffer size.
-    """
+    """Dialog to change the subscribed topic and alter the message buffer size."""
 
     def __init__(self, topics):
         """
+        Construct a ConsoleSettingsDialog object.
+
         :param topics: list of topics to allow switching, ''list of string''
         :param limit: displayed in the message buffer size spin box, ''int''
         """
@@ -64,9 +57,6 @@ class ConsoleSettingsDialog(QDialog):
         for topic in topics:
             self.topic_combo.addItem(topic + ' (rcl_interfaces/msg/Log)', topic)
 
-        # self._service_caller = LoggerLevelServiceCaller()
-        # self._logger_widget = LoggerLevelWidget(self._service_caller)
-        # self.levelsLayout.addWidget(self._logger_widget)
         self.adjustSize()
 
     def query(self, topic, buffer_size):

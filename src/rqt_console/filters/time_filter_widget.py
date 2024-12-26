@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -45,6 +43,7 @@ class TimeFilterWidget(QWidget):
     def __init__(self, parentfilter, time_range_provider):
         """
         Widget for displaying interactive data related to time filtering.
+
         :param parentfilter: buddy filter were data is stored, ''TimeFilter''
         :param display_list_args: single element list containing one tuple with
         the min and max time to be displayed, ''list of tuple''
@@ -93,6 +92,7 @@ class TimeFilterWidget(QWidget):
     def repopulate(self):
         """
         Stub function.
+
         If the widget had any dynamically adjustable data it would requery it
         in this function.
         """
@@ -100,7 +100,8 @@ class TimeFilterWidget(QWidget):
 
     def save_settings(self, settings):
         """
-        Saves the settings for this filter to an ini file.
+        Save the settings for this filter to an ini file.
+
         :param settings: used to write the settings to an ini file ''qt_gui.settings.Settings''
         """
         settings.set_value(
@@ -111,7 +112,8 @@ class TimeFilterWidget(QWidget):
 
     def restore_settings(self, settings):
         """
-        Restores the settings for this filter from an ini file.
+        Restore the settings for this filter from an ini file.
+
         :param settings: used to extract the settings from an ini file ''qt_gui.settings.Settings''
         """
         self.handle_stop_enabled_changed(settings.value('stop_time_enabled') in [True, 'true'])

@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -30,14 +28,14 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from rcl_interfaces.msg import Log
-
-import rclpy
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSDurabilityPolicy
-
 from python_qt_binding.QtCore import QMutex, QMutexLocker, QTimer
 
 from qt_gui.plugin import Plugin
+
+from rcl_interfaces.msg import Log
+
+from rclpy.qos import QoSDurabilityPolicy, QoSHistoryPolicy, QoSLivelinessPolicy, QoSProfile
+from rclpy.qos import QoSReliabilityPolicy
 
 from rqt_console.console_settings_dialog import ConsoleSettingsDialog
 from rqt_console.console_widget import ConsoleWidget
@@ -47,14 +45,16 @@ from rqt_console.message_proxy_model import MessageProxyModel
 
 
 class Console(Plugin):
-
     """
-    rqt_console plugin's main class. Handles communication with ros_gui and contains
-    callbacks to handle incoming message
+    rqt_console plugin's main class.
+
+    Handles communication with ros_gui and contains callbacks to handle incoming message
     """
 
     def __init__(self, context):
         """
+        Construct a Console object.
+
         :param context: plugin context hook to enable adding widgets as a ROS_GUI pane,
                         ''PluginContext''
         """
@@ -92,9 +92,7 @@ class Console(Plugin):
         self._subscribe(self._topic)
 
     def queue_message(self, log_msg):
-        """
-        Callback for adding an incomming message to the queue.
-        """
+        """Add an incoming message to the queue on callback."""
         if not self._widget._paused:
             msg = Console.convert_rosgraph_log_message(log_msg)
             with QMutexLocker(self._mutex):
@@ -112,9 +110,7 @@ class Console(Plugin):
         return msg
 
     def insert_messages(self):
-        """
-        Callback for flushing incoming Log messages from the queue to the model.
-        """
+        """Flush incoming Log messages from the queue to the model on callback."""
         with QMutexLocker(self._mutex):
             msgs = self._message_queue
             self._message_queue = []

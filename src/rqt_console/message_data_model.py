@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -30,7 +28,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt, qWarning
+from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt
 from python_qt_binding.QtGui import QBrush, QIcon
 
 from .message import Message
@@ -91,7 +89,6 @@ class MessageDataModel(QAbstractTableModel):
                     if role == Qt.UserRole:
                         # append row number to define strict order
                         # shortest string representation to compare stamps
-                        # print(column, data, str(index.row()).zfill(len(str(len(self._messages)))))
                         data = str(data) + ' %08x' % index.row()
                     return data
 
@@ -133,8 +130,8 @@ class MessageDataModel(QAbstractTableModel):
                     return self.tr('Sort the rows by serial number in descendig order')
                 else:
                     return self.tr(
-                        'Sorting the table by a column other then the serial number slows down the '
-                        'interaction especially when recording high frequency data')
+                        'Sorting the table by a column other then the serial number slows down the'
+                        ' interaction especially when recording high frequency data')
 
     # END Required implementations of QAbstractTableModel functions
 
@@ -165,6 +162,8 @@ class MessageDataModel(QAbstractTableModel):
 
     def remove_rows(self, rowlist):
         """
+        Remove rows.
+
         :param rowlist: list of row indexes, ''list(int)''
         :returns: True if the indexes were removed successfully, ''bool''
         """
@@ -174,7 +173,7 @@ class MessageDataModel(QAbstractTableModel):
                     self.beginRemoveRows(QModelIndex(), 0, len(self._messages))
                     del self._messages[0:len(self._messages)]
                     self.endRemoveRows()
-                except:
+                except Exception:
                     return False
         else:
             rowlist = list(set(rowlist))
@@ -186,7 +185,7 @@ class MessageDataModel(QAbstractTableModel):
                         self.beginRemoveRows(QModelIndex(), dellist[-1], dellist[0])
                         del self._messages[dellist[-1]:dellist[0] + 1]
                         self.endRemoveRows()
-                    except:
+                    except Exception:
                         return False
                     dellist = []
                 dellist.append(row)
@@ -195,13 +194,14 @@ class MessageDataModel(QAbstractTableModel):
                     self.beginRemoveRows(QModelIndex(), dellist[-1], dellist[0])
                     del self._messages[dellist[-1]:dellist[0] + 1]
                     self.endRemoveRows()
-                except:
+                except Exception:
                     return False
         return True
 
     def get_selected_text(self, rowlist):
         """
-        Returns an easily readable block of text for the currently selected rows
+        Return an easily readable block of text for the currently selected rows.
+
         :param rowlist: list of row indexes, ''list(int)''
         :returns: the text from those indexes, ''str''
         """
@@ -215,12 +215,14 @@ class MessageDataModel(QAbstractTableModel):
 
     def get_time_range(self, rowlist):
         """
+        Get a tuple of min and max times in a rowlist.
+
         :param rowlist: a list of row indexes, ''list''
         :returns: a tuple of min and max times in a rowlist in
                   '(unix timestamp).(fraction of second)' format, ''tuple(str,str)''
         """
-        min_ = float("inf")
-        max_ = float("-inf")
+        min_ = float('inf')
+        max_ = float('-inf')
         for row in rowlist:
             item = self._messages[row].time_as_datestamp()
             if float(item) > float(max_):
@@ -246,6 +248,8 @@ class MessageDataModel(QAbstractTableModel):
 
     def get_message_between(self, start_time, end_time=None):
         """
+        Get the messages between a start time and and optional end time.
+
         :param start_time: time to start in timestamp form (including decimal
         fractions of a second is acceptable, ''unixtimestamp''
         :param end_time: time to end in timestamp form (including decimal
