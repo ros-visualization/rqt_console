@@ -423,7 +423,7 @@ class ConsoleWidget(QWidget):
             self.tr('Message'): 0}
         try:
             col = types[selectiontype]
-        except Exception:
+        except KeyError:
             raise RuntimeError(
                 'Bad Column name in ConsoleWidget._process_highlight_exclude_filter()')
 

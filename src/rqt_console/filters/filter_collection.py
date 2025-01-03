@@ -53,6 +53,11 @@ class FilterCollection:
         return match
 
     def append(self, new_filter):
+        """
+        Append a filter to the list of filters.
+
+        :param new_filter: The new filter to append, ''BaseFilter''
+        """
         self._filters.append(new_filter)
 
     def count_enabled_filters(self):
