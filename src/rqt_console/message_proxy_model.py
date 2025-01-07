@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -30,21 +28,16 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtCore import Qt, qVersion, qWarning
-try:
-    from python_qt_binding.QtCore import QSortFilterProxyModel  # Qt 5
-except ImportError:
-    from python_qt_binding.QtGui import QSortFilterProxyModel  # Qt 4
-from python_qt_binding.QtGui import QBrush, QColor
+from python_qt_binding.QtCore import QSortFilterProxyModel, Qt
+from python_qt_binding.QtGui import QBrush
 
 from .filters.filter_collection import FilterCollection
-from .message import Message
 
 
 class MessageProxyModel(QSortFilterProxyModel):
-
     """
     Provides sorting and filtering capabilities for the MessageDataModel.
+
     Filtering is based on a collection of exclude and highlight filters.
     """
 
@@ -70,6 +63,8 @@ class MessageProxyModel(QSortFilterProxyModel):
 
     def filterAcceptsRow(self, sourcerow, sourceparent):
         """
+        Filter accepts row.
+
         returns: True if the row does not match any exclude filter AND (_show_highlighted_only is
                  False OR it matches any highlight filter), ''bool''
         """
@@ -92,9 +87,7 @@ class MessageProxyModel(QSortFilterProxyModel):
         return True
 
     def data(self, proxy_index, role=None):
-        """
-        Set colors of items based on highlight filters.
-        """
+        """Set colors of items based on highlight filters."""
         index = self.mapToSource(proxy_index)
         if role == Qt.ForegroundRole:
             msg = self._source_model._messages[index.row()]
@@ -105,25 +98,17 @@ class MessageProxyModel(QSortFilterProxyModel):
     # END Required implementations of QSortFilterProxyModel functions
 
     def handle_exclude_filters_changed(self):
-        """
-        Invalidate filters and trigger refiltering.
-        """
+        """Invalidate filters and trigger refiltering."""
         self.invalidateFilter()
 
     def handle_highlight_filters_changed(self):
-        """
-        Invalidate filters and trigger refiltering.
-        """
+        """Invalidate filters and trigger refiltering."""
         if self._show_highlighted_only:
             self.invalidateFilter()
         else:
             self.invalidateFilter()
-            if qVersion().startswith('4.'):
-                self.dataChanged.emit(
-                    self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1))
-            else:
-                self.dataChanged.emit(
-                    self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1), [])
+            self.dataChanged.emit(
+                self.index(0, 0), self.index(self.rowCount() - 1, self.columnCount() - 1), [])
 
     def add_exclude_filter(self, newfilter):
         self._exclude_filters.append(newfilter)

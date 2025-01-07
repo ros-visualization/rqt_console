@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -30,32 +28,30 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import datetime
 import os
+import time
 
 from ament_index_python.resources import get_resource
 
 from python_qt_binding import loadUi
+from python_qt_binding.QtCore import QRegExp, Qt, qWarning
 from python_qt_binding.QtGui import QCursor, QIcon
 from python_qt_binding.QtWidgets import (QApplication, QFileDialog, QHeaderView,
                                          QMenu, QMessageBox, QTableView, QWidget)
-from python_qt_binding.QtCore import QRegExp, Qt, qWarning
-
-import time
-import datetime
 
 from rqt_py_common.ini_helper import pack, unpack
 
 from .filters.custom_filter import CustomFilter
+from .filters.custom_filter_widget import CustomFilterWidget
+from .filters.filter_wrapper_widget import FilterWrapperWidget
+from .filters.list_filter_widget import ListFilterWidget
 from .filters.location_filter import LocationFilter
 from .filters.message_filter import MessageFilter
 from .filters.node_filter import NodeFilter
 from .filters.severity_filter import SeverityFilter
-from .filters.time_filter import TimeFilter
-
-from .filters.custom_filter_widget import CustomFilterWidget
-from .filters.filter_wrapper_widget import FilterWrapperWidget
-from .filters.list_filter_widget import ListFilterWidget
 from .filters.text_filter_widget import TextFilterWidget
+from .filters.time_filter import TimeFilter
 from .filters.time_filter_widget import TimeFilterWidget
 
 from .message import Message
@@ -65,13 +61,12 @@ from .text_browse_dialog import TextBrowseDialog
 
 
 class ConsoleWidget(QWidget):
-
-    """
-    Primary widget for the rqt_console plugin.
-    """
+    """Primary widget for the rqt_console plugin."""
 
     def __init__(self, proxy_model, minimal=False):
         """
+        Construct a ConsoleWidget object.
+
         :param proxymodel: the proxy model to display in the widget,''QSortFilterProxyModel''
         :param minimal: if true the load, save and column buttons will be hidden as well as the
                         filter splitter, ''bool''
@@ -112,10 +107,12 @@ class ConsoleWidget(QWidget):
             if logical_index == 0:
                 self._proxy_model.sort(-1)
             self.table_view.horizontalHeader().setSortIndicatorShown(logical_index != 0)
-        self.table_view.horizontalHeader().sortIndicatorChanged.connect(update_sort_indicator)
 
-        self.table_view.horizontalHeader().setContextMenuPolicy(Qt.CustomContextMenu)
-        self.table_view.horizontalHeader().customContextMenuRequested.connect(self._handle_column_right_click)
+        horizontal_header = self.table_view.horizontalHeader()
+        horizontal_header.sortIndicatorChanged.connect(update_sort_indicator)
+
+        horizontal_header.setContextMenuPolicy(Qt.CustomContextMenu)
+        horizontal_header.customContextMenuRequested.connect(self._handle_column_right_click)
 
         self.add_exclude_button.setIcon(QIcon.fromTheme('list-add'))
         self.add_highlight_button.setIcon(QIcon.fromTheme('list-add'))
@@ -208,6 +205,8 @@ class ConsoleWidget(QWidget):
 
     def get_message_summary(self, start_time_offset=None, end_time_offset=None):
         """
+        Get a message summary.
+
         :param start_time: number of seconds before now to start, ''int'' (optional)
         :param end_time: number of seconds before now to end, ''int'' (optional)
         :returns: summary of message numbers within time
@@ -251,6 +250,8 @@ class ConsoleWidget(QWidget):
 
     def get_time_range_from_selection(self):
         """
+        Get the time range from a selection.
+
         :returns: the range of time of messages in the current table selection (min, max),
                   ''tuple(str,str)''
         """
@@ -259,16 +260,14 @@ class ConsoleWidget(QWidget):
 
         if indexes:
             rowlist = [self._proxy_model.mapToSource(current).row() for current in indexes]
-            rowlist = sorted(list(set(rowlist)))
+            rowlist = sorted(set(rowlist))
 
             mintime, maxtime = self._model.get_time_range(rowlist)
             return (mintime, maxtime)
         return (-1, -1)
 
     def _delete_highlight_filter(self):
-        """
-        Deletes any highlight filters which have a checked delete button
-        """
+        """Delete any highlight filters which have a checked delete button."""
         for index, item in enumerate(self._highlight_filters):
             if item[1].delete_button.isChecked():
                 self._proxy_model.delete_highlight_filter(index)
@@ -280,9 +279,7 @@ class ConsoleWidget(QWidget):
                 del self._highlight_filters[index]
 
     def _delete_exclude_filter(self):
-        """
-        Deletes any exclude filters which have a checked delete button
-        """
+        """Delete any exclude filters which have a checked delete button."""
         for index, item in enumerate(self._exclude_filters):
             if item[1].delete_button.isChecked():
                 self._proxy_model.delete_exclude_filter(index)
@@ -295,6 +292,8 @@ class ConsoleWidget(QWidget):
 
     def _add_highlight_filter(self, filter_index=False):
         """
+        Add a highlight filter.
+
         :param filter_index: if false then this function shows a QMenu to allow the user to choose
                              a type of message filter. ''bool''
         OR
@@ -310,9 +309,9 @@ class ConsoleWidget(QWidget):
                 # flattens the _highlight filters list and only adds the item if it
                 # doesn't already exist
 
+                flat_list = [type(item) for sublist in self._highlight_filters for item in sublist]
                 if index in ['message', 'location'] or \
-                        not self.filter_factory[index][1] in \
-                            [type(item) for sublist in self._highlight_filters for item in sublist]:
+                   not self.filter_factory[index][1] in flat_list:
                     filter_select_menu.addAction(self.filter_factory[index][0])
             action = filter_select_menu.exec_(QCursor.pos())
             if action is None:
@@ -353,8 +352,10 @@ class ConsoleWidget(QWidget):
 
     def _add_exclude_filter(self, filter_index=False):
         """
-        :param filter_index: if false then this function shows a QMenu to allow the user to choose a
-                             type of message filter. ''bool''
+        Add an exclude filter.
+
+        :param filter_index: if false then this function shows a QMenu to allow the user to choose
+                             a type of message filter. ''bool''
         OR
         :param filter_index: the index of the filter to be added, ''int''
         :return: if a filter was added then the index is returned, ''int''
@@ -409,8 +410,8 @@ class ConsoleWidget(QWidget):
 
     def _process_highlight_exclude_filter(self, selection, selectiontype, exclude=False):
         """
-        Modifies the relevant filters (based on selectiontype) to remove (exclude=True)
-        or highlight (exclude=False) the selection from the dataset in the tableview.
+        Modify the relevant filters to remove or highlight the selection from the dataset.
+
         :param selection: the actual selection, ''str''
         :param selectiontype: the type of selection, ''str''
         :param exclude: If True process as an exclude filter, False process as an highlight filter,
@@ -422,9 +423,9 @@ class ConsoleWidget(QWidget):
             self.tr('Message'): 0}
         try:
             col = types[selectiontype]
-        except:
+        except KeyError:
             raise RuntimeError(
-                "Bad Column name in ConsoleWidget._process_highlight_exclude_filter()")
+                'Bad Column name in ConsoleWidget._process_highlight_exclude_filter()')
 
         if col == 0:
             unique_messages = set()
@@ -448,22 +449,24 @@ class ConsoleWidget(QWidget):
 
         else:
             if exclude:
-                # Test if the filter we are adding already exists if it does use the existing filter
+                # Test if the filter we are adding already exists;
+                # if it does use the existing filter
                 if self.filter_factory[selectiontype.lower()][1] not in \
                         [type(item) for sublist in self._exclude_filters for item in sublist]:
                     filter_index = self._add_exclude_filter(selectiontype.lower())
                 else:
                     for index, item in enumerate(self._exclude_filters):
-                        if type(item[0]) == self.filter_factory[selectiontype.lower()][1]:
+                        if type(item[0]) is self.filter_factory[selectiontype.lower()][1]:
                             filter_index = index
             else:
-                # Test if the filter we are adding already exists if it does use the existing filter
+                # Test if the filter we are adding already exists;
+                # if it does use the existing filter
                 if self.filter_factory[selectiontype.lower()][1] not in \
                         [type(item) for sublist in self._highlight_filters for item in sublist]:
                     filter_index = self._add_highlight_filter(col)
                 else:
                     for index, item in enumerate(self._highlight_filters):
-                        if type(item[0]) == self.filter_factory[selectiontype.lower()][1]:
+                        if type(item[0]) is self.filter_factory[selectiontype.lower()][1]:
                             filter_index = index
 
             if exclude:
@@ -477,8 +480,9 @@ class ConsoleWidget(QWidget):
 
     def _rightclick_menu(self, event):
         """
-        Dynamically builds the rightclick menu based on the unique column data
-        from the passed in datamodel and then launches it modally
+        Dynamically build the rightclick menu.
+
+        Based on the unique column data from the passed in datamodel and then launch it modally.
         :param event: the mouse event object, ''QMouseEvent''
         """
         severities = {}
@@ -540,13 +544,13 @@ class ConsoleWidget(QWidget):
             elif action.parentWidget().title() == self.tr('Exclude'):
                 self._process_highlight_exclude_filter(action.text(), 'Message', True)
             else:
-                raise RuntimeError("Menu format corruption in ConsoleWidget._rightclick_menu()")
+                raise RuntimeError('Menu format corruption in ConsoleWidget._rightclick_menu()')
         else:
             # This processes the dynamic list entries (severity and node)
             try:
                 roottitle = action.parentWidget().parentWidget().title()
-            except:
-                raise RuntimeError("Menu format corruption in ConsoleWidget._rightclick_menu()")
+            except Exception:
+                raise RuntimeError('Menu format corruption in ConsoleWidget._rightclick_menu()')
 
             if roottitle == self.tr('Highlight'):
                 self._process_highlight_exclude_filter(
@@ -556,13 +560,11 @@ class ConsoleWidget(QWidget):
                     action.text(), action.parentWidget().title(), True)
             else:
                 raise RuntimeError(
-                    "Unknown Root Action %s selected in ConsoleWidget._rightclick_menu()" %
+                    'Unknown Root Action %s selected in ConsoleWidget._rightclick_menu()' %
                     roottitle)
 
     def update_status(self):
-        """
-        Sets the message display label to the current value
-        """
+        """Set the message display label to the current value."""
         if self._model.rowCount() == self._proxy_model.rowCount():
             tip = self.tr('Displaying %d messages') % (self._model.rowCount())
         else:
@@ -747,16 +749,17 @@ class ConsoleWidget(QWidget):
         showall = menu.addAction('Show all columns')
 
         # Don't allow hiding the last column
-        if self.table_view.horizontalHeader().count() - self.table_view.horizontalHeader().hiddenSectionCount() == 1:
+        horizontal_header = self.table_view.horizontalHeader()
+        if horizontal_header.count() - horizontal_header.hiddenSectionCount() == 1:
             hide.setEnabled(False)
 
-        ac = menu.exec_(self.table_view.horizontalHeader().mapToGlobal(pos))
+        ac = menu.exec_(horizontal_header.mapToGlobal(pos))
         if ac == hide:
-            column = self.table_view.horizontalHeader().logicalIndexAt(pos.x())
-            self.table_view.horizontalHeader().hideSection(column)
+            column = horizontal_header.logicalIndexAt(pos.x())
+            horizontal_header.hideSection(column)
         elif ac == showall:
-            for i in range(self.table_view.horizontalHeader().count()):
-                self.table_view.horizontalHeader().showSection(i)
+            for i in range(horizontal_header.count()):
+                horizontal_header.showSection(i)
 
     def _delete_selected_rows(self):
         rowlist = []
@@ -767,7 +770,8 @@ class ConsoleWidget(QWidget):
 
     def _handle_custom_keypress(self, event, old_keyPressEvent=QTableView.keyPressEvent):
         """
-        Handles the delete key.
+        Handle the delete key.
+
         The delete key removes the tableview's selected rows from the datamodel
         """
         if event.key() == Qt.Key_Delete and len(self._model._messages) > 0:
@@ -775,7 +779,7 @@ class ConsoleWidget(QWidget):
             if len(self.table_view.selectionModel().selectedIndexes()) == 0:
                 delete = QMessageBox.question(
                     self, self.tr('Message'),
-                    self.tr("Are you sure you want to delete all messages?"),
+                    self.tr('Are you sure you want to delete all messages?'),
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if delete == QMessageBox.Yes and \
                     event.key() == Qt.Key_Delete and \
@@ -849,7 +853,8 @@ class ConsoleWidget(QWidget):
             if exclude_filters is not None:
                 for index, item in enumerate(exclude_filters):
                     self._add_exclude_filter(item)
-                    filter_settings = instance_settings.get_settings('exclude_filter_' + str(index))
+                    index_name = f'exclude_filter_{str(index)}'
+                    filter_settings = instance_settings.get_settings(index_name)
                     self._exclude_filters[-1][1].restore_settings(filter_settings)
         else:
             self._add_exclude_filter('severity')

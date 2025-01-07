@@ -1,4 +1,4 @@
-# Copyright (c) 2012, Willow Garage, Inc.
+# Copyright (c) 2024, Open Source Robotics Foundation, Inc.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -11,7 +11,7 @@
 #     copyright notice, this list of conditions and the following
 #     disclaimer in the documentation and/or other materials provided
 #     with the distribution.
-#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#   * Neither the name of the copyright holder nor the names of its
 #     contributors may be used to endorse or promote products derived
 #     from this software without specific prior written permission.
 #
@@ -28,14 +28,12 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from .message_filter import MessageFilter
+from ament_xmllint.main import main
+import pytest
 
 
-class LocationFilter(MessageFilter):
-    """Contains filter logic for a location filter."""
-
-    def __init__(self):
-        super(LocationFilter, self).__init__()
-
-    def test_message(self, message):
-        return self._test_message(message.location)
+@pytest.mark.linter
+@pytest.mark.xmllint
+def test_xmllint() -> None:
+    rc = main(argv=[])
+    assert rc == 0, 'Found errors'

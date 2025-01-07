@@ -1,5 +1,3 @@
-# Software License Agreement (BSD License)
-#
 # Copyright (c) 2012, Willow Garage, Inc.
 # All rights reserved.
 #
@@ -7,21 +5,21 @@
 # modification, are permitted provided that the following conditions
 # are met:
 #
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above
-#    copyright notice, this list of conditions and the following
-#    disclaimer in the documentation and/or other materials provided
-#    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above
+#     copyright notice, this list of conditions and the following
+#     disclaimer in the documentation and/or other materials provided
+#     with the distribution.
+#   * Neither the name of the Willow Garage, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 # LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
 # FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 # INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 # BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
@@ -43,14 +41,12 @@ from rqt_py_common.ini_helper import pack, unpack
 
 
 class ListFilterWidget(QWidget):
-
-    """
-    Generic List widget to be used when implementing filters that require
-    limited dynamic selections
-    """
+    """Generic List widget to implement filters that require limited dynamic selections."""
 
     def __init__(self, parentfilter, item_provider):
         """
+        Construct a ListFilterWidget object.
+
         :param parentfilter: The filter object, must implement set_list and
         contain _list ''QObject''
         :param item_provider: a function designed to provide a list or dict
@@ -78,7 +74,8 @@ class ListFilterWidget(QWidget):
 
     def select_item(self, text):
         """
-        All items matching text will be selected in the list_widget
+        All items matching text will be selected in the list_widget.
+
         :param item: a string to be matched against the list ''str''
         """
         items = self.list_widget.findItems(text, Qt.MatchExactly)
@@ -90,10 +87,7 @@ class ListFilterWidget(QWidget):
         self._parentfilter.set_selected_items(self.list_widget.selectedItems())
 
     def repopulate(self):
-        """
-        Repopulates the display widgets based on the function arguments passed
-        in during initialization
-        """
+        """Repopulates display widgets based on the function arguments passed during init."""
         new_items = self._list_populate_function()
 
         new_set = set(new_items.values() if isinstance(new_items, dict) else new_items)
@@ -114,9 +108,7 @@ class ListFilterWidget(QWidget):
         self._display_list = sorted(set(new_set) | set(self._display_list))
 
     def _add_item(self, item):
-        """
-        Insert item in alphabetical order.
-        """
+        """Insert item in alphabetical order."""
         for i in range(self.list_widget.count()):
             if item <= self.list_widget.item(i).text():
                 self.list_widget.insertItem(i, item)
@@ -125,14 +117,16 @@ class ListFilterWidget(QWidget):
 
     def save_settings(self, settings):
         """
-        Saves the settings for this filter.
+        Save the settings for this filter.
+
         :param settings: used to write the settings to an ini file ''qt_gui.settings.Settings''
         """
         settings.set_value('itemlist', pack(self._parentfilter._selected_items))
 
     def restore_settings(self, settings):
         """
-        Restores the settings for this filter from an ini file.
+        Restore the settings for this filter from an ini file.
+
         :param settings: used to extract the settings from an ini file ''qt_gui.settings.Settings''
         """
         for index in range(self.list_widget.count()):
