@@ -853,7 +853,7 @@ class ConsoleWidget(QWidget):
             if exclude_filters is not None:
                 for index, item in enumerate(exclude_filters):
                     self._add_exclude_filter(item)
-                    index_name = 'exclude_filter_' + str(index)
+                    index_name = f'exclude_filter_{str(index)}'
                     filter_settings = instance_settings.get_settings(index_name)
                     self._exclude_filters[-1][1].restore_settings(filter_settings)
         else:

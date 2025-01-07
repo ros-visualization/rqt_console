@@ -28,8 +28,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtCore import QSortFilterProxyModel
-from python_qt_binding.QtCore import Qt
+from python_qt_binding.QtCore import QSortFilterProxyModel, Qt
 from python_qt_binding.QtGui import QBrush
 
 from .filters.filter_collection import FilterCollection
