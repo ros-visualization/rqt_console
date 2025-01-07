@@ -2,6 +2,12 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.1 (2025-01-07)
+------------------
+* Add in standard tests. (`#48 <https://github.com/ros-visualization/rqt_console/issues/48>`_)
+* Remove CODEOWNERS and mirror-rolling-to-main workflow (`#46 <https://github.com/ros-visualization/rqt_console/issues/46>`_)
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+
 2.3.0 (2024-04-26)
 ------------------
 
