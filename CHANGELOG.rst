@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* bump cmake_minimum_required_versions in CMakeLists.txt (`#44 <https://github.com/ros-visualization/rqt_console/issues/44>`_)
+* Contributors: Arne Hitzmann, mosfet80
+
 0.4.12 (2023-10-02)
 -------------------
 * added LICENSE file
