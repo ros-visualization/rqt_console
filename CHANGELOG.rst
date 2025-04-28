@@ -2,6 +2,9 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.0 (2025-04-28)
+------------------
+
 2.3.1 (2025-01-07)
 ------------------
 * Add in standard tests. (`#48 <https://github.com/ros-visualization/rqt_console/issues/48>`_)
