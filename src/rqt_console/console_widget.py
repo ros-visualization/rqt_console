@@ -142,9 +142,11 @@ class ConsoleWidget(QWidget):
         self.save_button.clicked[bool].connect(self._handle_save_clicked)
         self.column_resize_button.clicked[bool].connect(self._handle_column_resize_clicked)
         self.clear_button.clicked[bool].connect(self._handle_clear_button_clicked)
+        self.dt_box.stateChanged.connect(self._handle_dt_box_clicked)
 
         self.table_view.mouseDoubleClickEvent = self._handle_mouse_double_click
         self.table_view.mousePressEvent = self._handle_mouse_press
+        self.table_view.mouseReleaseEvent = self._handle_mouse_release
         self.table_view.keyPressEvent = self._handle_custom_keypress
 
         self.highlight_exclude_button.clicked[bool].connect(
@@ -587,6 +589,9 @@ class ConsoleWidget(QWidget):
         self._model.remove_rows([])
         Message._next_id = 1
 
+    def _handle_dt_box_clicked(self):
+        self._model.relative_timestamps = self.dt_box.isChecked()
+
     def _handle_load_clicked(self, checked):
         filename = QFileDialog.getOpenFileName(
             self, self.tr('Load from File'), '.',
@@ -797,6 +802,13 @@ class ConsoleWidget(QWidget):
         if event.buttons() & Qt.RightButton and event.modifiers() == Qt.NoModifier:
             self._rightclick_menu(event)
             event.accept()
+
+    def _handle_mouse_release(self, event, old_pressEvent=QTableView.mousePressEvent):
+        # Get the row as the time origin.
+        indexes = self.table_view.selectionModel().selectedIndexes()
+        if indexes:
+            message_index = self._proxy_model.mapToSource(indexes[0]).row()
+            self._model.set_index_relative_to(message_index)
         return old_pressEvent(self.table_view, event)
 
     def save_settings(self, plugin_settings, instance_settings):
