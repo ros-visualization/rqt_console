@@ -110,6 +110,16 @@
       </spacer>
      </item>
      <item>
+      <widget class="QCheckBox" name="dt_box">
+       <property name="toolTip">
+        <string>Toggle absolute/relative time stamps</string>
+       </property>
+       <property name="text">
+        <string>Δt</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="clear_button">
        <property name="text">
         <string>Clear</string>

@@ -33,6 +33,12 @@
 from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
 
+def time_diff(stamp1: tuple[int, int], stamp2: tuple[int, int]) -> float:
+    t1_ns = stamp1[0] * 1e9 + stamp1[1]
+    t2_ns = stamp2[0] * 1e9 + stamp2[1]
+    return (t2_ns - t1_ns) / 1e9
+
+
 class Message(QObject):
 
     DEBUG = 10
@@ -109,7 +115,9 @@ class Message(QObject):
         dt.addMSecs(int(float(stamp[1]) / 10**6))
         return dt
 
-    def get_stamp_string(self):
+    def get_stamp_string(self, relative_to: 'Message' = None):
+        if relative_to:
+            return f'{time_diff(relative_to.stamp, self.stamp):.6f}'
         return self._stamp_string
 
     def set_stamp_format(self, stamp_format):

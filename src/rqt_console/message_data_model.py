@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from typing import Optional
+
 from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt, qWarning
 from python_qt_binding.QtGui import QBrush, QIcon
 
@@ -54,6 +56,8 @@ class MessageDataModel(QAbstractTableModel):
         super(MessageDataModel, self).__init__()
         self._messages = MessageList()
         self._message_limit = 20000
+        self._relative_timestamps = False
+        self._relative_to: Optional[int] = None
         self._info_icon = QIcon.fromTheme('dialog-information')
         self._warning_icon = QIcon.fromTheme('dialog-warning')
         self._error_icon = QIcon.fromTheme('dialog-error')
@@ -79,7 +83,11 @@ class MessageDataModel(QAbstractTableModel):
                 if role == Qt.DisplayRole or role == Qt.UserRole:
                     if column == 'stamp':
                         if role != Qt.UserRole:
-                            data = msg.get_stamp_string()
+                            if self._relative_timestamps and (self._relative_to is not None) and (index.row() != self._relative_to):
+                                relative_to = self._messages[self._relative_to]
+                                data = msg.get_stamp_string(relative_to)
+                            else:
+                                data = msg.get_stamp_string()
                         else:
                             data = msg.get_stamp_for_compare()
                     else:
@@ -137,6 +145,24 @@ class MessageDataModel(QAbstractTableModel):
                         'interaction especially when recording high frequency data')
 
     # END Required implementations of QAbstractTableModel functions
+
+    @property
+    def relative_timestamps(self):
+        return self._relative_timestamps
+
+    @relative_timestamps.setter
+    def relative_timestamps(self, value):
+        self._relative_timestamps = bool(value)
+        top_row = self.index(0, self.columns.index('stamp'))
+        bottom_row = self.index(self.rowCount() - 1, top_row.column())
+        self.dataChanged.emit(top_row, bottom_row)
+
+    def set_index_relative_to(self, index: int):
+        if 0 <= index < len(self._messages):
+            self._relative_to = index
+            top_row = self.index(0, self.columns.index('stamp'))
+            bottom_row = self.index(self.rowCount() - 1, top_row.column())
+            self.dataChanged.emit(top_row, bottom_row)
 
     def get_message_limit(self):
         return self._message_limit
