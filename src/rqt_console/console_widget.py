@@ -464,7 +464,7 @@ class ConsoleWidget(QWidget):
                 # Test if the filter we are adding already exists if it does use the existing filter
                 if self.filter_factory[selectiontype.lower()][1] not in \
                         [type(item) for sublist in self._highlight_filters for item in sublist]:
-                    filter_index = self._add_highlight_filter(col)
+                    filter_index = self._add_highlight_filter(selectiontype.lower())
                 else:
                     for index, item in enumerate(self._highlight_filters):
                         if type(item[0]) == self.filter_factory[selectiontype.lower()][1]:
