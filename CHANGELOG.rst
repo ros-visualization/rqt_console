@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.14 (2025-05-12)
+-------------------
+* Fix arg to _add_highlight_filter to avoid KeyError (`#27 <https://github.com/ros-visualization/rqt_console/issues/27>`_)
+* Contributors: Arne Hitzmann, Naoya Yamaguchi
+
 0.4.13 (2025-04-09)
 -------------------
 * bump cmake_minimum_required_versions in CMakeLists.txt (`#44 <https://github.com/ros-visualization/rqt_console/issues/44>`_)
