@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix setuptools deprecations (`#50 <https://github.com/ros-visualization/rqt_console/issues/50>`_)
+* Contributors: mosfet80
+
 2.4.0 (2025-04-28)
 ------------------
 
