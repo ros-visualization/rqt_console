@@ -76,8 +76,8 @@ def ansi_foreground(data):
     # returns the foreground color to be used for data
     for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
         attribute = int(m.group("int"))
-        if 30 <= attribute <= 37:
-            color_index = attribute - 30
+        if 30 <= attribute <= 37 or 90 <= attribute <= 97:
+            color_index = attribute % 30
             if color_index == 0:
                 color = Qt.black
             elif color_index == 1:
