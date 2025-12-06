@@ -828,6 +828,8 @@ class ConsoleWidget(QWidget):
         instance_settings.set_value('highlight_filters', pack(highlight_filters))
         instance_settings.set_value('message_limit', self._model.get_message_limit())
 
+        instance_settings.set_value('colors_enabled', self._model.get_colors_enabled())
+
     def restore_settings(self, pluggin_settings, instance_settings):
         if instance_settings.contains('table_splitter'):
             self.table_splitter.restoreState(instance_settings.value('table_splitter'))
@@ -875,3 +877,7 @@ class ConsoleWidget(QWidget):
 
         if instance_settings.contains('message_limit'):
             self._model.set_message_limit(int(instance_settings.value('message_limit')))
+
+        if instance_settings.contains('colors_enabled'):
+            colors_enabled = instance_settings.value('colors_enabled') in [True, 'true']
+            self._model.set_colors_enabled(colors_enabled)

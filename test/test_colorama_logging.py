@@ -1,3 +1,4 @@
+import time
 import rclpy
 from rclpy.node import Node
 import colorama
@@ -20,3 +21,6 @@ n.get_logger().warning("normal again")
 n.get_logger().error("normal")
 n.get_logger().error(Fore.RED + Style.BRIGHT + "bold and red!")
 n.get_logger().error("normal again")
+
+# Ensure the messages make it to rosout before the script dies
+time.sleep(1)

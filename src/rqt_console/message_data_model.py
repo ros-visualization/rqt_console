@@ -120,6 +120,7 @@ class MessageDataModel(QAbstractTableModel):
         super(MessageDataModel, self).__init__()
         self._messages = MessageList()
         self._message_limit = 20000
+        self._colors_enabled = True
         self._info_icon = QIcon.fromTheme('dialog-information')
         self._warning_icon = QIcon.fromTheme('dialog-warning')
         self._error_icon = QIcon.fromTheme('dialog-error')
@@ -153,12 +154,10 @@ class MessageDataModel(QAbstractTableModel):
                     # map severity enum to label
                     if role == Qt.DisplayRole and column == 'severity':
                         data = Message.SEVERITY_LABELS[data]
-                    # remove ansii codes
+                    # remove ANSI codes
                     if column == 'message':
-                        data = filter_ansi_codes(data)
-                    # implode topic names
-                    if column == 'topics':
-                        data = ', '.join(data)
+                        if self._colors_enabled:
+                            data = filter_ansi_codes(data)
                     # append row number to define strict order
                     if role == Qt.UserRole:
                         # append row number to define strict order
@@ -191,15 +190,16 @@ class MessageDataModel(QAbstractTableModel):
                         self.tr('Right click for menu.') + '</font>'
 
                 # handle some of the ANSI codes
-                if role == Qt.ForegroundRole and column == 'message':
-                    data = ansi_foreground(msg.message)
-                    return data
-                if role == Qt.FontRole and column == 'message':
-                    data = ansi_font_properties(msg.message)
-                    return data
-                if role == Qt.BackgroundRole and column == 'message':
-                    data = ansi_background(msg.message)
-                    return data
+                if self._colors_enabled:
+                    if role == Qt.ForegroundRole and column == 'message':
+                        data = ansi_foreground(msg.message)
+                        return data
+                    if role == Qt.FontRole and column == 'message':
+                        data = ansi_font_properties(msg.message)
+                        return data
+                    if role == Qt.BackgroundRole and column == 'message':
+                        data = ansi_background(msg.message)
+                        return data
 
     def headerData(self, section, orientation, role=None):
         if role is None:
@@ -223,9 +223,15 @@ class MessageDataModel(QAbstractTableModel):
     def get_message_limit(self):
         return self._message_limit
 
+    def get_colors_enabled(self):
+        return self._colors_enabled
+
     def set_message_limit(self, new_limit):
         self._message_limit = new_limit
         self._enforce_message_limit(self._message_limit)
+
+    def set_colors_enabled(self, enabled):
+        self._colors_enabled = enabled
 
     def _enforce_message_limit(self, limit):
         if len(self._messages) > limit:
