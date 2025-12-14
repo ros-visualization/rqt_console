@@ -59,15 +59,17 @@ class ConsoleSettingsDialog(QDialog):
 
         self.adjustSize()
 
-    def query(self, topic, buffer_size):
+    def query(self, topic, buffer_size, colors_enabled):
         index = self.topic_combo.findData(topic)
         if index != -1:
             self.topic_combo.setCurrentIndex(index)
         self.buffer_size_spin.setValue(buffer_size)
+        self.colors_checkbox.setChecked(colors_enabled)
         ok = self.exec_()
         if ok == 1:
             index = self.topic_combo.currentIndex()
             if index != -1:
                 topic = self.topic_combo.itemData(index)
             buffer_size = self.buffer_size_spin.value()
-        return topic, buffer_size
+            colors_enabled = self.colors_checkbox.isChecked()
+        return topic, buffer_size, colors_enabled

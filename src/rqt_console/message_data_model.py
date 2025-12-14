@@ -29,14 +29,82 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt
-from python_qt_binding.QtGui import QBrush, QIcon
+from python_qt_binding.QtGui import QBrush, QIcon, QFont, QColor
+import re
 
 from .message import Message
 from .message_list import MessageList
 
 
-class MessageDataModel(QAbstractTableModel):
+def ansi_background(data):
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if 40 <= attribute <= 47:
+            color_index = attribute - 40
+            if color_index == 0:
+                color = Qt.black
+            elif color_index == 1:
+                color = Qt.red
+            elif color_index == 2:
+                color = Qt.green
+            elif color_index == 3:
+                color = Qt.yellow
+            elif color_index == 4:
+                color = Qt.blue
+            elif color_index == 5:
+                color = Qt.magenta
+            elif color_index == 6:
+                color = Qt.cyan
+            elif color_index == 7:
+                color = Qt.white
+            else:
+                raise NotImplementedError()
+            return QColor(color)
+    return None
 
+
+def ansi_font_properties(data):
+    font = QFont()
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if attribute == 1:
+            font.setBold(True)
+    return font
+
+
+def ansi_foreground(data):
+    # returns the foreground color to be used for data
+    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
+        attribute = int(m.group("int"))
+        if 30 <= attribute <= 37 or 90 <= attribute <= 97:
+            color_index = attribute % 30
+            if color_index == 0:
+                color = Qt.black
+            elif color_index == 1:
+                color = Qt.red
+            elif color_index == 2:
+                color = Qt.green
+            elif color_index == 3:
+                color = Qt.yellow
+            elif color_index == 4:
+                color = Qt.blue
+            elif color_index == 5:
+                color = Qt.magenta
+            elif color_index == 6:
+                color = Qt.cyan
+            elif color_index == 7:
+                color = Qt.white
+            else:
+                raise NotImplementedError()
+            return QBrush(color)
+    return None
+
+
+def filter_ansi_codes(data):
+    return re.sub(r"\x1b\[(?P<int>\d+)m", "", data)
+
+
+class MessageDataModel(QAbstractTableModel):
     # the column names must match the message attributes
     columns = ['message', 'severity', 'node', 'stamp', 'location']
 
@@ -52,6 +120,7 @@ class MessageDataModel(QAbstractTableModel):
         super(MessageDataModel, self).__init__()
         self._messages = MessageList()
         self._message_limit = 20000
+        self._colors_enabled = True
         self._info_icon = QIcon.fromTheme('dialog-information')
         self._warning_icon = QIcon.fromTheme('dialog-warning')
         self._error_icon = QIcon.fromTheme('dialog-error')
@@ -85,6 +154,10 @@ class MessageDataModel(QAbstractTableModel):
                     # map severity enum to label
                     if role == Qt.DisplayRole and column == 'severity':
                         data = Message.SEVERITY_LABELS[data]
+                    # remove ANSI codes
+                    if column == 'message':
+                        if self._colors_enabled:
+                            data = filter_ansi_codes(data)
                     # append row number to define strict order
                     if role == Qt.UserRole:
                         # append row number to define strict order
@@ -116,6 +189,18 @@ class MessageDataModel(QAbstractTableModel):
                     return '<font>' + data + '<br/><br/>' + \
                         self.tr('Right click for menu.') + '</font>'
 
+                # handle some of the ANSI codes
+                if self._colors_enabled:
+                    if role == Qt.ForegroundRole and column == 'message':
+                        data = ansi_foreground(msg.message)
+                        return data
+                    if role == Qt.FontRole and column == 'message':
+                        data = ansi_font_properties(msg.message)
+                        return data
+                    if role == Qt.BackgroundRole and column == 'message':
+                        data = ansi_background(msg.message)
+                        return data
+
     def headerData(self, section, orientation, role=None):
         if role is None:
             role = Qt.DisplayRole
@@ -138,9 +223,15 @@ class MessageDataModel(QAbstractTableModel):
     def get_message_limit(self):
         return self._message_limit
 
+    def get_colors_enabled(self):
+        return self._colors_enabled
+
     def set_message_limit(self, new_limit):
         self._message_limit = new_limit
         self._enforce_message_limit(self._message_limit)
+
+    def set_colors_enabled(self, enabled):
+        self._colors_enabled = enabled
 
     def _enforce_message_limit(self, limit):
         if len(self._messages) > limit:
