@@ -2,6 +2,12 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.2 (2025-12-15)
+------------------
+* fix setuptools deprecations (backport `#50 <https://github.com/ros-visualization/rqt_console/issues/50>`_) (`#52 <https://github.com/ros-visualization/rqt_console/issues/52>`_)
+* Remove CODEOWNERS and mirror-rolling-to-main workflow (backport `#46 <https://github.com/ros-visualization/rqt_console/issues/46>`_) (`#47 <https://github.com/ros-visualization/rqt_console/issues/47>`_)
+* Contributors: mergify[bot]
+
 2.2.1 (2024-02-07)
 ------------------
 * Add a test dependency on pytest. (`#45 <https://github.com/ros-visualization/rqt_console/issues/45>`_)
