@@ -28,17 +28,18 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt
-from python_qt_binding.QtGui import QBrush, QIcon, QFont, QColor
 import re
+
+from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt
+from python_qt_binding.QtGui import QBrush, QColor, QFont, QIcon
 
 from .message import Message
 from .message_list import MessageList
 
 
 def ansi_background(data):
-    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
-        attribute = int(m.group("int"))
+    for m in re.finditer(r'\x1b\[(?P<int>\d+)m', data):
+        attribute = int(m.group('int'))
         if 40 <= attribute <= 47:
             color_index = attribute - 40
             if color_index == 0:
@@ -65,8 +66,8 @@ def ansi_background(data):
 
 def ansi_font_properties(data):
     font = QFont()
-    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
-        attribute = int(m.group("int"))
+    for m in re.finditer(r'\x1b\[(?P<int>\d+)m', data):
+        attribute = int(m.group('int'))
         if attribute == 1:
             font.setBold(True)
     return font
@@ -74,8 +75,8 @@ def ansi_font_properties(data):
 
 def ansi_foreground(data):
     # returns the foreground color to be used for data
-    for m in re.finditer(r"\x1b\[(?P<int>\d+)m", data):
-        attribute = int(m.group("int"))
+    for m in re.finditer(r'\x1b\[(?P<int>\d+)m', data):
+        attribute = int(m.group('int'))
         if 30 <= attribute <= 37 or 90 <= attribute <= 97:
             color_index = attribute % 30
             if color_index == 0:
@@ -101,7 +102,7 @@ def ansi_foreground(data):
 
 
 def filter_ansi_codes(data):
-    return re.sub(r"\x1b\[(?P<int>\d+)m", "", data)
+    return re.sub(r'\x1b\[(?P<int>\d+)m', '', data)
 
 
 class MessageDataModel(QAbstractTableModel):
