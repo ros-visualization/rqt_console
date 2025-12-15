@@ -1,14 +1,10 @@
 import time
 import rclpy
 from rclpy.node import Node
-import colorama
-from colorama import Fore, Style
 
 rclpy.init()
 
 n = Node('test_logging')
-
-colorama.init(autoreset=True)
 
 n.get_logger().info("normal")
 n.get_logger().info("\033[31m\033[1mbold and red!")
