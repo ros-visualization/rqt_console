@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.2 (2025-12-15)
+------------------
+* fix setuptools deprecations (backport `#50 <https://github.com/ros-visualization/rqt_console/issues/50>`_) (`#51 <https://github.com/ros-visualization/rqt_console/issues/51>`_)
+* Contributors: mergify[bot]
+
 2.3.1 (2025-01-07)
 ------------------
 * Add in standard tests. (`#48 <https://github.com/ros-visualization/rqt_console/issues/48>`_)
