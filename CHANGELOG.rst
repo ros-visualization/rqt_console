@@ -2,6 +2,21 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.2 (2025-12-15)
+------------------
+* fixed copyright test (`#57 <https://github.com/ros-visualization/rqt_console/issues/57>`_)
+* added copyright header
+* fixed flake8 (`#56 <https://github.com/ros-visualization/rqt_console/issues/56>`_)
+* fixed flake8
+* remove residual imports in colored output test-file (`#55 <https://github.com/ros-visualization/rqt_console/issues/55>`_)
+* remove residual imports
+* basic support for colors and bold/bright using ANSI escape codes (`#54 <https://github.com/ros-visualization/rqt_console/issues/54>`_)
+* replace colorama dependency with manual ansi codes
+* add checkbox in the settings
+* support more color codes
+* basic support for colors and bold/bright
+* Contributors: Arne Hitzmann, Peter, peter
+
 2.4.1 (2025-07-30)
 ------------------
 * fix setuptools deprecations (`#50 <https://github.com/ros-visualization/rqt_console/issues/50>`_)
