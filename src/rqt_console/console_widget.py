@@ -35,7 +35,8 @@ import time
 from ament_index_python.resources import get_resource
 
 from packaging.version import Version
-from python_qt_binding import loadUi, QT_BINDING_VERSION
+
+from python_qt_binding import QT_BINDING_VERSION, loadUi
 if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
     from python_qt_binding.QtCore import QRegularExpression  # noqa: F401
 else:
@@ -58,10 +59,8 @@ from .filters.severity_filter import SeverityFilter
 from .filters.text_filter_widget import TextFilterWidget
 from .filters.time_filter import TimeFilter
 from .filters.time_filter_widget import TimeFilterWidget
-
 from .message import Message
 from .message_data_model import MessageDataModel
-
 from .text_browse_dialog import TextBrowseDialog
 
 

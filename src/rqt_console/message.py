@@ -34,6 +34,7 @@ from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
 from rclpy.time import Time
 
+
 class Message(QObject):
 
     DEBUG = 10

@@ -29,6 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from packaging.version import Version
+
 from python_qt_binding import QT_BINDING_VERSION
 if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
     from python_qt_binding.QtCore import QRegularExpression  # noqa: F401
