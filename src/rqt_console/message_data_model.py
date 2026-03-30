@@ -43,21 +43,21 @@ def ansi_background(data):
         if 40 <= attribute <= 47:
             color_index = attribute - 40
             if color_index == 0:
-                color = Qt.black
+                color = QColorConstants.Black
             elif color_index == 1:
-                color = Qt.red
+                color = QColorConstants.Red
             elif color_index == 2:
-                color = Qt.green
+                color = QColorConstants.Green
             elif color_index == 3:
-                color = Qt.yellow
+                color = QColorConstants.Yellow
             elif color_index == 4:
-                color = Qt.blue
+                color = QColorConstants.Blue
             elif color_index == 5:
-                color = Qt.magenta
+                color = QColorConstants.Magenta
             elif color_index == 6:
-                color = Qt.cyan
+                color = QColorConstants.Cyan
             elif color_index == 7:
-                color = Qt.white
+                color = QColorConstants.White
             else:
                 raise NotImplementedError()
             return QColor(color)

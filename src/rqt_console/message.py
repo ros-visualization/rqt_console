@@ -28,8 +28,11 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from datetime import datetime
+
 from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
 
+from rclpy.time import Time
 
 class Message(QObject):
 
@@ -103,8 +106,6 @@ class Message(QObject):
     def _get_stamp_as_qdatetime(self, stamp):
         if None in self.__stamp:
             return None
-        from rclpy.time import Time
-        from datetime import datetime
         ros_time = Time(seconds=stamp[0], nanoseconds=stamp[1])
         dt_object = datetime.fromtimestamp(ros_time.nanoseconds * 1e-9)
         dt = QDateTime(

@@ -30,7 +30,7 @@
 
 from packaging.version import Version
 from python_qt_binding import QT_BINDING_VERSION
-if Version(QT_BINDING_VERSION) > Version('6.0.0'):
+if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
     from python_qt_binding.QtCore import QRegularExpression  # noqa: F401
 else:
     from python_qt_binding.QtCore import QRegExp  # noqa: F401
@@ -104,7 +104,12 @@ class MessageFilter(BaseFilter):
                     temp = '.*' + temp
                 if temp[-1] != '$':
                     temp += '.*'
-                if QRegExp(temp).exactMatch(value):
+                if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
+                    match = QRegularExpression(temp).match(value)
+                    matched = match.hasMatch() and match.captured(0) == value
+                else:
+                    matched = QRegExp(temp).exactMatch(value)
+                if matched:
                     return True
             else:
                 if value.find(self._text) != -1:
