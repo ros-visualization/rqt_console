@@ -28,8 +28,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
 from datetime import datetime
+import os
 
 from ament_index_python.resources import get_resource
 
