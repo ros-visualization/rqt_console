@@ -64,7 +64,9 @@ class ListFilterWidget(QWidget):
         self._parentfilter = parentfilter
 
         # keep color for highlighted items even when not active
-        active_color = self.palette().brush(QPalette.Active, QPalette.Highlight).color().name()
+        active_color = self.palette().brush(
+            QPalette.ColorGroup.Active,
+            QPalette.ColorRole.Highlight).color().name()
         self.setStyleSheet('QListWidget:item:selected:!active { background: %s; }' % active_color)
 
         self._list_populate_function = item_provider
@@ -78,7 +80,7 @@ class ListFilterWidget(QWidget):
 
         :param item: a string to be matched against the list ''str''
         """
-        items = self.list_widget.findItems(text, Qt.MatchExactly)
+        items = self.list_widget.findItems(text, Qt.MatchFlag.MatchExactly)
         for item in items:
             item.setSelected(True)
         self.handle_item_changed()
@@ -100,7 +102,7 @@ class ListFilterWidget(QWidget):
                     if item not in self._display_list:
                         self.list_widget.addItem(item)
                         self.list_widget.item(
-                            self.list_widget.count() - 1).setData(Qt.UserRole, key)
+                            self.list_widget.count() - 1).setData(Qt.ItemDataRole.UserRole, key)
             else:
                 for item in new_items:
                     if item not in self._display_list:
@@ -133,6 +135,6 @@ class ListFilterWidget(QWidget):
             self.list_widget.item(index).setSelected(False)
         item_list = unpack(settings.value('itemlist'))
         for item in item_list:
-            if len(self.list_widget.findItems(item, Qt.MatchExactly)) == 0:
+            if len(self.list_widget.findItems(item, Qt.MatchFlag.MatchExactly)) == 0:
                 self.list_widget.addItem(item)
             self.select_item(item)

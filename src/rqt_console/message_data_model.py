@@ -31,7 +31,7 @@
 import re
 
 from python_qt_binding.QtCore import QAbstractTableModel, QModelIndex, Qt
-from python_qt_binding.QtGui import QBrush, QColor, QFont, QIcon
+from python_qt_binding.QtGui import QBrush, QColor, QColorConstants, QFont, QIcon
 
 from .message import Message
 from .message_list import MessageList
@@ -43,21 +43,21 @@ def ansi_background(data):
         if 40 <= attribute <= 47:
             color_index = attribute - 40
             if color_index == 0:
-                color = Qt.black
+                color = QColorConstants.Black
             elif color_index == 1:
-                color = Qt.red
+                color = QColorConstants.Red
             elif color_index == 2:
-                color = Qt.green
+                color = QColorConstants.Green
             elif color_index == 3:
-                color = Qt.yellow
+                color = QColorConstants.Yellow
             elif color_index == 4:
-                color = Qt.blue
+                color = QColorConstants.Blue
             elif color_index == 5:
-                color = Qt.magenta
+                color = QColorConstants.Magenta
             elif color_index == 6:
-                color = Qt.cyan
+                color = QColorConstants.Cyan
             elif color_index == 7:
-                color = Qt.white
+                color = QColorConstants.White
             else:
                 raise NotImplementedError()
             return QColor(color)
@@ -80,21 +80,21 @@ def ansi_foreground(data):
         if 30 <= attribute <= 37 or 90 <= attribute <= 97:
             color_index = attribute % 30
             if color_index == 0:
-                color = Qt.black
+                color = QColorConstants.Black
             elif color_index == 1:
-                color = Qt.red
+                color = QColorConstants.Red
             elif color_index == 2:
-                color = Qt.green
+                color = QColorConstants.Green
             elif color_index == 3:
-                color = Qt.yellow
+                color = QColorConstants.Yellow
             elif color_index == 4:
-                color = Qt.blue
+                color = QColorConstants.Blue
             elif color_index == 5:
-                color = Qt.magenta
+                color = QColorConstants.Magenta
             elif color_index == 6:
-                color = Qt.cyan
+                color = QColorConstants.Cyan
             elif color_index == 7:
-                color = Qt.white
+                color = QColorConstants.white
             else:
                 raise NotImplementedError()
             return QBrush(color)
@@ -110,11 +110,11 @@ class MessageDataModel(QAbstractTableModel):
     columns = ['message', 'severity', 'node', 'stamp', 'location']
 
     severity_colors = {
-        Message.DEBUG: QBrush(Qt.darkCyan),
-        Message.INFO: QBrush(Qt.darkBlue),
-        Message.WARN: QBrush(Qt.darkYellow),
-        Message.ERROR: QBrush(Qt.darkRed),
-        Message.FATAL: QBrush(Qt.red),
+        Message.DEBUG: QBrush(QColorConstants.DarkCyan),
+        Message.INFO: QBrush(QColorConstants.DarkBlue),
+        Message.WARN: QBrush(QColorConstants.DarkYellow),
+        Message.ERROR: QBrush(QColorConstants.DarkRed),
+        Message.FATAL: QBrush(QColorConstants.Red),
     }
 
     def __init__(self):
@@ -136,38 +136,38 @@ class MessageDataModel(QAbstractTableModel):
 
     def data(self, index, role=None):
         if role is None:
-            role = Qt.DisplayRole
+            role = Qt.ItemDataRole.DisplayRole
         if index.row() >= 0 and index.row() < len(self._messages):
             msg = self._messages[index.row()]
             if index.column() == 0:
-                if role == Qt.DisplayRole:
+                if role == Qt.ItemDataRole.DisplayRole:
                     return '#%d' % msg.id
             elif index.column() > 0 and index.column() < len(MessageDataModel.columns) + 1:
                 column = MessageDataModel.columns[index.column() - 1]
-                if role == Qt.DisplayRole or role == Qt.UserRole:
+                if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.UserRole:
                     if column == 'stamp':
-                        if role != Qt.UserRole:
+                        if role != Qt.ItemDataRole.UserRole:
                             data = msg.get_stamp_string()
                         else:
                             data = msg.get_stamp_for_compare()
                     else:
                         data = getattr(msg, column)
                     # map severity enum to label
-                    if role == Qt.DisplayRole and column == 'severity':
+                    if role == Qt.ItemDataRole.DisplayRole and column == 'severity':
                         data = Message.SEVERITY_LABELS[data]
                     # remove ANSI codes
                     if column == 'message':
                         if self._colors_enabled:
                             data = filter_ansi_codes(data)
                     # append row number to define strict order
-                    if role == Qt.UserRole:
+                    if role == Qt.ItemDataRole.UserRole:
                         # append row number to define strict order
                         # shortest string representation to compare stamps
                         data = str(data) + ' %08x' % index.row()
                     return data
 
                 # decorate message column with severity icon
-                if role == Qt.DecorationRole and column == 'message':
+                if role == Qt.ItemDataRole.DecorationRole and column == 'message':
                     if msg.severity in [Message.DEBUG, Message.INFO]:
                         return self._info_icon
                     elif msg.severity in [Message.WARN]:
@@ -176,12 +176,12 @@ class MessageDataModel(QAbstractTableModel):
                         return self._error_icon
 
                 # colorize severity label
-                if role == Qt.ForegroundRole and column == 'severity':
+                if role == Qt.ItemDataRole.ForegroundRole and column == 'severity':
                     assert msg.severity in MessageDataModel.severity_colors, \
                         'Unknown severity type: %s' % msg.severity
                     return MessageDataModel.severity_colors[msg.severity]
 
-                if role == Qt.ToolTipRole and column != 'severity':
+                if role == Qt.ItemDataRole.ToolTipRole and column != 'severity':
                     if column == 'stamp':
                         data = msg.get_stamp_string()
                     else:
@@ -192,26 +192,26 @@ class MessageDataModel(QAbstractTableModel):
 
                 # handle some of the ANSI codes
                 if self._colors_enabled:
-                    if role == Qt.ForegroundRole and column == 'message':
+                    if role == Qt.ItemDataRole.ForegroundRole and column == 'message':
                         data = ansi_foreground(msg.message)
                         return data
-                    if role == Qt.FontRole and column == 'message':
+                    if role == Qt.ItemDataRole.FontRole and column == 'message':
                         data = ansi_font_properties(msg.message)
                         return data
-                    if role == Qt.BackgroundRole and column == 'message':
+                    if role == Qt.ItemDataRole.BackgroundRole and column == 'message':
                         data = ansi_background(msg.message)
                         return data
 
     def headerData(self, section, orientation, role=None):
         if role is None:
-            role = Qt.DisplayRole
-        if orientation == Qt.Horizontal:
-            if role == Qt.DisplayRole:
+            role = Qt.ItemDataRole.DisplayRole
+        if orientation == Qt.Orientation.Horizontal:
+            if role == Qt.ItemDataRole.DisplayRole:
                 if section == 0:
                     return self.tr('#')
                 else:
                     return MessageDataModel.columns[section - 1].capitalize()
-            if role == Qt.ToolTipRole:
+            if role == Qt.ItemDataRole.ToolTipRole:
                 if section == 0:
                     return self.tr('Sort the rows by serial number in descendig order')
                 else:

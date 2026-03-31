@@ -28,7 +28,11 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from datetime import datetime
+
 from python_qt_binding.QtCore import QCoreApplication, QDateTime, QObject
+
+from rclpy.time import Time
 
 
 class Message(QObject):
@@ -103,9 +107,13 @@ class Message(QObject):
     def _get_stamp_as_qdatetime(self, stamp):
         if None in self.__stamp:
             return None
-        dt = QDateTime()
-        dt.setTime_t(stamp[0])
-        dt.addMSecs(int(float(stamp[1]) / 10**6))
+        ros_time = Time(seconds=stamp[0], nanoseconds=stamp[1])
+        dt_object = datetime.fromtimestamp(ros_time.nanoseconds * 1e-9)
+        dt = QDateTime(
+            dt_object.year, dt_object.month,
+            dt_object.day, dt_object.hour,
+            dt_object.minute, dt_object.second, 0)
+
         return dt
 
     def get_stamp_string(self):

@@ -44,9 +44,9 @@ class MessageProxyModel(QSortFilterProxyModel):
     def __init__(self):
         super(MessageProxyModel, self).__init__()
         self.setDynamicSortFilter(True)
-        self.setFilterRole(Qt.UserRole)
-        self.setSortCaseSensitivity(Qt.CaseInsensitive)
-        self.setSortRole(Qt.UserRole)
+        self.setFilterRole(Qt.ItemDataRole.UserRole)
+        self.setSortCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.setSortRole(Qt.ItemDataRole.UserRole)
 
         self._exclude_filters = FilterCollection()
         self._highlight_filters = FilterCollection()
@@ -89,7 +89,7 @@ class MessageProxyModel(QSortFilterProxyModel):
     def data(self, proxy_index, role=None):
         """Set colors of items based on highlight filters."""
         index = self.mapToSource(proxy_index)
-        if role == Qt.ForegroundRole:
+        if role == Qt.ItemDataRole.ForegroundRole:
             msg = self._source_model._messages[index.row()]
             if not msg.highlighted:
                 return QBrush(Qt.gray)

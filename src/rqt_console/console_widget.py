@@ -34,8 +34,14 @@ import time
 
 from ament_index_python.resources import get_resource
 
-from python_qt_binding import loadUi
-from python_qt_binding.QtCore import QRegExp, Qt, qWarning
+from packaging.version import Version
+
+from python_qt_binding import loadUi, QT_BINDING_VERSION
+if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
+    from python_qt_binding.QtCore import QRegularExpression  # noqa: F401
+else:
+    from python_qt_binding.QtCore import QRegExp  # noqa: F401
+from python_qt_binding.QtCore import Qt, qWarning
 from python_qt_binding.QtGui import QCursor, QIcon
 from python_qt_binding.QtWidgets import (QApplication, QFileDialog, QHeaderView,
                                          QMenu, QMessageBox, QTableView, QWidget)
@@ -53,10 +59,8 @@ from .filters.severity_filter import SeverityFilter
 from .filters.text_filter_widget import TextFilterWidget
 from .filters.time_filter import TimeFilter
 from .filters.time_filter_widget import TimeFilterWidget
-
 from .message import Message
 from .message_data_model import MessageDataModel
-
 from .text_browse_dialog import TextBrowseDialog
 
 
@@ -101,7 +105,7 @@ class ConsoleWidget(QWidget):
             setSectionResizeMode = self.table_view.horizontalHeader().setSectionResizeMode  # Qt5
         except AttributeError:
             setSectionResizeMode = self.table_view.horizontalHeader().setResizeMode  # Qt4
-        setSectionResizeMode(1, QHeaderView.Stretch)
+        setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
         def update_sort_indicator(logical_index, order):
             if logical_index == 0:
@@ -111,7 +115,7 @@ class ConsoleWidget(QWidget):
         horizontal_header = self.table_view.horizontalHeader()
         horizontal_header.sortIndicatorChanged.connect(update_sort_indicator)
 
-        horizontal_header.setContextMenuPolicy(Qt.CustomContextMenu)
+        horizontal_header.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         horizontal_header.customContextMenuRequested.connect(self._handle_column_right_click)
 
         self.add_exclude_button.setIcon(QIcon.fromTheme('list-add'))
@@ -313,7 +317,7 @@ class ConsoleWidget(QWidget):
                 if index in ['message', 'location'] or \
                    not self.filter_factory[index][1] in flat_list:
                     filter_select_menu.addAction(self.filter_factory[index][0])
-            action = filter_select_menu.exec_(QCursor.pos())
+            action = filter_select_menu.exec(QCursor.pos())
             if action is None:
                 return
             for index in self._filter_factory_order:
@@ -372,7 +376,7 @@ class ConsoleWidget(QWidget):
                         not self.filter_factory[index][1] in \
                             [type(item) for sublist in self._exclude_filters for item in sublist]:
                     filter_select_menu.addAction(self.filter_factory[index][0])
-            action = filter_select_menu.exec_(QCursor.pos())
+            action = filter_select_menu.exec(QCursor.pos())
             if action is None:
                 return None
             for index in self._filter_factory_order:
@@ -524,7 +528,10 @@ class ConsoleWidget(QWidget):
                 menu.addMenu(submenus[-1])
             else:
                 menu.addAction(item[0])
-        action = menu.exec_(event.globalPos())
+        if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
+            action = menu.exec(event.globalPosition().toPoint())
+        else:
+            action = menu.exec(event.globalPos())
 
         if action is None or action == 0:
             return
@@ -753,7 +760,7 @@ class ConsoleWidget(QWidget):
         if horizontal_header.count() - horizontal_header.hiddenSectionCount() == 1:
             hide.setEnabled(False)
 
-        ac = menu.exec_(horizontal_header.mapToGlobal(pos))
+        ac = menu.exec(horizontal_header.mapToGlobal(pos))
         if ac == hide:
             column = horizontal_header.logicalIndexAt(pos.x())
             horizontal_header.hideSection(column)
@@ -783,7 +790,7 @@ class ConsoleWidget(QWidget):
                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if delete == QMessageBox.Yes and \
                     event.key() == Qt.Key_Delete and \
-                    event.modifiers() == Qt.NoModifier:
+                    event.modifiers() == Qt.KeyboardModifier.NoModifier:
                 if self._delete_selected_rows():
                     event.accept()
         return old_keyPressEvent(self.table_view, event)
@@ -792,13 +799,15 @@ class ConsoleWidget(QWidget):
             self, event,
             old_doubleclickevent=QTableView.mouseDoubleClickEvent):
 
-        if event.buttons() & Qt.LeftButton and event.modifiers() == Qt.NoModifier:
+        if event.buttons() & Qt.MouseButton.LeftButton and \
+                event.modifiers() == Qt.KeyboardModifier.NoModifier:
             self._show_browsers()
             event.accept()
         return old_doubleclickevent(self.table_view, event)
 
     def _handle_mouse_press(self, event, old_pressEvent=QTableView.mousePressEvent):
-        if event.buttons() & Qt.RightButton and event.modifiers() == Qt.NoModifier:
+        if event.buttons() & Qt.MouseButton.RightButton and \
+                event.modifiers() == Qt.KeyboardModifier.NoModifier:
             self._rightclick_menu(event)
             event.accept()
         return old_pressEvent(self.table_view, event)

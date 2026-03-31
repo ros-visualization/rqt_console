@@ -71,6 +71,6 @@ class SeverityFilter(BaseFilter):
         if not self.is_enabled():
             return False
         for item in self._selected_items:
-            if message.severity == item.data(Qt.UserRole):
+            if message.severity == item.data(Qt.ItemDataRole.UserRole):
                 return True
         return False

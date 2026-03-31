@@ -57,7 +57,7 @@ class CustomFilterWidget(QWidget):
         # keep color for highlighted items even when not active
         for list_widget in [self.severity_list, self.node_list]:
             active_color = list_widget.palette().brush(
-                QPalette.Active, QPalette.Highlight).color().name()
+                QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight).color().name()
             list_widget.setStyleSheet(
                 'QListWidget:item:selected:!active { background: %s; }' % active_color)
 
@@ -72,7 +72,8 @@ class CustomFilterWidget(QWidget):
         for key in sorted(new_items.keys()):
             item = new_items[key]
             self.severity_list.addItem(item)
-            self.severity_list.item(self.severity_list.count() - 1).setData(Qt.UserRole, key)
+            self.severity_list.item(self.severity_list.count() - 1).setData(
+                Qt.ItemDataRole.UserRole, key)
 
         # Node Filter Initialization
         self._node_list_populate_function = item_providers[1]
@@ -96,7 +97,7 @@ class CustomFilterWidget(QWidget):
         """Repopulates display widgets based on function arguments passed during init."""
         newset = self._node_list_populate_function()
         for item in newset:
-            if len(self.node_list.findItems(item, Qt.MatchExactly)) == 0:
+            if len(self.node_list.findItems(item, Qt.MatchFlag.MatchExactly)) == 0:
                 self._add_item(self.node_list, item)
 
     def _add_item(self, list_widget, item):
@@ -141,7 +142,7 @@ class CustomFilterWidget(QWidget):
             self.severity_list.item(index).setSelected(False)
         severity_item_list = unpack(settings.value('severityitemlist'))
         for item in severity_item_list:
-            items = self.severity_list.findItems(item, Qt.MatchExactly)
+            items = self.severity_list.findItems(item, Qt.MatchFlag.MatchExactly)
             for item in items:
                 item.setSelected(True)
         self.handle_severity_item_changed()
@@ -151,9 +152,9 @@ class CustomFilterWidget(QWidget):
             self.node_list.item(index).setSelected(False)
         node_item_list = unpack(settings.value('nodeitemlist'))
         for item in node_item_list:
-            if len(self.node_list.findItems(item, Qt.MatchExactly)) == 0:
+            if len(self.node_list.findItems(item, Qt.MatchFlag.MatchExactly)) == 0:
                 self.node_list.addItem(item)
-            items = self.node_list.findItems(item, Qt.MatchExactly)
+            items = self.node_list.findItems(item, Qt.MatchFlag.MatchExactly)
             for item in items:
                 item.setSelected(True)
         self.handle_node_item_changed()
