@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.3 (2026-04-13)
+------------------
+* Support Qt6 (`#58 <https://github.com/ros-visualization/rqt_console/issues/58>`_)
+* Contributors: Alejandro Hernández Cordero
+
 2.4.2 (2025-12-15)
 ------------------
 * fixed copyright test (`#57 <https://github.com/ros-visualization/rqt_console/issues/57>`_)
