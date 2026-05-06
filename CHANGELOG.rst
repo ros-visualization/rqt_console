@@ -2,6 +2,9 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (2026-05-06)
+------------------
+
 2.4.3 (2026-04-13)
 ------------------
 * Support Qt6 (`#58 <https://github.com/ros-visualization/rqt_console/issues/58>`_)
