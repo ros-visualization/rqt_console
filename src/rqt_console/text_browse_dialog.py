@@ -46,7 +46,7 @@ class TextBrowseDialog(QDialog):
 
         :param text: value to set the text of the widget to, ''str''
         """
-        super(TextBrowseDialog, self).__init__()
+        super().__init__()
 
         _, package_path = get_resource('packages', 'rqt_console')
         ui_file = os.path.join(

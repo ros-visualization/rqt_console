@@ -29,7 +29,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from python_qt_binding.QtCore import QSortFilterProxyModel, Qt
-from python_qt_binding.QtGui import QBrush
+from python_qt_binding.QtGui import QBrush, QColorConstants
 
 from .filters.filter_collection import FilterCollection
 
@@ -42,7 +42,7 @@ class MessageProxyModel(QSortFilterProxyModel):
     """
 
     def __init__(self):
-        super(MessageProxyModel, self).__init__()
+        super().__init__()
         self.setDynamicSortFilter(True)
         self.setFilterRole(Qt.ItemDataRole.UserRole)
         self.setSortCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
@@ -56,7 +56,7 @@ class MessageProxyModel(QSortFilterProxyModel):
         self._source_model = None
 
     def setSourceModel(self, source_model):
-        super(MessageProxyModel, self).setSourceModel(source_model)
+        super().setSourceModel(source_model)
         self._source_model = self.sourceModel()
 
     # BEGIN Required implementations of QSortFilterProxyModel functions
@@ -92,7 +92,7 @@ class MessageProxyModel(QSortFilterProxyModel):
         if role == Qt.ItemDataRole.ForegroundRole:
             msg = self._source_model._messages[index.row()]
             if not msg.highlighted:
-                return QBrush(Qt.gray)
+                return QBrush(QColorConstants.Gray)
         return self._source_model.data(index, role)
 
     # END Required implementations of QSortFilterProxyModel functions
