@@ -46,7 +46,7 @@ class ConsoleSettingsDialog(QDialog):
         :param topics: list of topics to allow switching, ''list of string''
         :param limit: displayed in the message buffer size spin box, ''int''
         """
-        super(ConsoleSettingsDialog, self).__init__()
+        super().__init__()
 
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)
@@ -65,7 +65,7 @@ class ConsoleSettingsDialog(QDialog):
             self.topic_combo.setCurrentIndex(index)
         self.buffer_size_spin.setValue(buffer_size)
         self.colors_checkbox.setChecked(colors_enabled)
-        ok = self.exec_()
+        ok = self.exec()
         if ok == 1:
             index = self.topic_combo.currentIndex()
             if index != -1:

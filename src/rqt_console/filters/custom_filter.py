@@ -43,7 +43,7 @@ class CustomFilter(BaseFilter):
     """
 
     def __init__(self):
-        super(CustomFilter, self).__init__()
+        super().__init__()
 
         self._message = MessageFilter()
         self._severity = SeverityFilter()
@@ -62,7 +62,7 @@ class CustomFilter(BaseFilter):
         """
         for f in self._all_filters:
             f.set_enabled(checked)
-        super(CustomFilter, self).set_enabled(checked)
+        super().set_enabled(checked)
 
     def _relay_signal(self):
         """Pass any signals emitted by the child filters along."""

@@ -31,7 +31,7 @@
 class MessageList(object):
 
     def __init__(self):
-        super(MessageList, self).__init__()
+        super().__init__()
         self._messages = []
 
     def __getitem__(self, key):

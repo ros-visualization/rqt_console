@@ -48,7 +48,7 @@ class TimeFilterWidget(QWidget):
         :param display_list_args: single element list containing one tuple with
         the min and max time to be displayed, ''list of tuple''
         """
-        super(TimeFilterWidget, self).__init__()
+        super().__init__()
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)
         ui_file = os.path.join(
@@ -69,10 +69,10 @@ class TimeFilterWidget(QWidget):
             maxtime = str(maxtime).split('.')
 
             time = QDateTime()
-            time.setTime_t(int(mintime[0]))
+            time.setSecsSinceEpoch(int(mintime[0]))
             mintime = time.addMSecs(int(str(mintime[1]).zfill(9)[:3]))
             self.start_datetime.setDateTime(mintime)
-            time.setTime_t(int(maxtime[0]))
+            time.setSecsSinceEpoch(int(maxtime[0]))
             maxtime = time.addMSecs(int(str(maxtime[1]).zfill(9)[:3]))
             self.stop_datetime.setDateTime(maxtime)
         else:

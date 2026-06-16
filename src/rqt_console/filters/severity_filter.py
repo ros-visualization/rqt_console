@@ -42,7 +42,7 @@ class SeverityFilter(BaseFilter):
     """
 
     def __init__(self):
-        super(SeverityFilter, self).__init__()
+        super().__init__()
         self._selected_items = []
 
     def set_selected_items(self, items):

@@ -54,7 +54,7 @@ class Message(QObject):
     _next_id = 1
 
     def __init__(self):
-        super(Message, self).__init__()
+        super().__init__()
         self.id = Message._next_id
         Message._next_id += 1
 
@@ -86,7 +86,7 @@ class Message(QObject):
         if None not in self.__stamp:
             # shortest string representation to compare stamps
             # floats do not provide enough precision
-            self._stamp_compare = '%08x%08x' % (self.__stamp[0], self.__stamp[1])
+            self._stamp_compare = f'{self.__stamp[0]:08x}{self.__stamp[1]:08x}'
         else:
             self._stamp_compare = None
         self._stamp_qdatetime = self._get_stamp_as_qdatetime(self.__stamp)
