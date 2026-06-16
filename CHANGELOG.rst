@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.1 (2026-06-16)
+------------------
+* Use logger.warning(), f-string and super() (`#59 <https://github.com/ros-visualization/rqt_console/issues/59>`_)
+* Contributors: Alejandro Hernández Cordero
+
 3.0.0 (2026-05-06)
 ------------------
 
