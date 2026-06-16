@@ -118,7 +118,7 @@ class MessageDataModel(QAbstractTableModel):
     }
 
     def __init__(self):
-        super(MessageDataModel, self).__init__()
+        super().__init__()
         self._messages = MessageList()
         self._message_limit = 20000
         self._colors_enabled = True
@@ -141,7 +141,7 @@ class MessageDataModel(QAbstractTableModel):
             msg = self._messages[index.row()]
             if index.column() == 0:
                 if role == Qt.ItemDataRole.DisplayRole:
-                    return '#%d' % msg.id
+                    return f'#{msg.id:d}'
             elif index.column() > 0 and index.column() < len(MessageDataModel.columns) + 1:
                 column = MessageDataModel.columns[index.column() - 1]
                 if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.UserRole:
@@ -163,7 +163,7 @@ class MessageDataModel(QAbstractTableModel):
                     if role == Qt.ItemDataRole.UserRole:
                         # append row number to define strict order
                         # shortest string representation to compare stamps
-                        data = str(data) + ' %08x' % index.row()
+                        data = str(data) + f' {index.row():08x}'
                     return data
 
                 # decorate message column with severity icon
@@ -178,7 +178,7 @@ class MessageDataModel(QAbstractTableModel):
                 # colorize severity label
                 if role == Qt.ItemDataRole.ForegroundRole and column == 'severity':
                     assert msg.severity in MessageDataModel.severity_colors, \
-                        'Unknown severity type: %s' % msg.severity
+                        f'Unknown severity type: {msg.severity}'
                     return MessageDataModel.severity_colors[msg.severity]
 
                 if role == Qt.ItemDataRole.ToolTipRole and column != 'severity':
@@ -262,7 +262,7 @@ class MessageDataModel(QAbstractTableModel):
         if len(rowlist) == 0:
             if len(self._messages) > 0:
                 try:
-                    self.beginRemoveRows(QModelIndex(), 0, len(self._messages))
+                    self.beginRemoveRows(QModelIndex(), 0, len(self._messages) - 1)
                     del self._messages[0:len(self._messages)]
                     self.endRemoveRows()
                 except Exception:

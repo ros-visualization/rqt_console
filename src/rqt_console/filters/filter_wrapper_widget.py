@@ -47,7 +47,7 @@ class FilterWrapperWidget(QWidget):
         :param widget: the Qwidget to wrap ''Qwidget''
         :param filter_name: the name to be placed on the label ''str''
         """
-        super(FilterWrapperWidget, self).__init__()
+        super().__init__()
 
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)

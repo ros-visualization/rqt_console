@@ -35,7 +35,7 @@ class LocationFilter(MessageFilter):
     """Contains filter logic for a location filter."""
 
     def __init__(self):
-        super(LocationFilter, self).__init__()
+        super().__init__()
 
     def test_message(self, message):
         return self._test_message(message.location)

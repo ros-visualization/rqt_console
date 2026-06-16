@@ -43,7 +43,7 @@ from rqt_py_common.ini_helper import pack, unpack
 class CustomFilterWidget(QWidget):
 
     def __init__(self, parentfilter, item_providers):
-        super(CustomFilterWidget, self).__init__()
+        super().__init__()
 
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)
@@ -59,7 +59,7 @@ class CustomFilterWidget(QWidget):
             active_color = list_widget.palette().brush(
                 QPalette.ColorGroup.Active, QPalette.ColorRole.Highlight).color().name()
             list_widget.setStyleSheet(
-                'QListWidget:item:selected:!active { background: %s; }' % active_color)
+                f'QListWidget:item:selected:!active {{ background: {active_color}; }}')
 
         # Text Filter Initialization
         self.text_edit.textChanged.connect(self.handle_text_changed)

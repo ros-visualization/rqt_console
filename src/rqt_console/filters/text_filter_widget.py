@@ -44,7 +44,7 @@ class TextFilterWidget(QWidget):
 
         :param parentfilter: buddy filter were data is stored, ''TimeFilter''
         """
-        super(TextFilterWidget, self).__init__()
+        super().__init__()
 
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)

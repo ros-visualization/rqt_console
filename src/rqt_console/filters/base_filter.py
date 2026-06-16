@@ -41,7 +41,7 @@ class BaseFilter(QObject):
     filter_changed_signal = Signal()
 
     def __init__(self):
-        super(BaseFilter, self).__init__()
+        super().__init__()
         self._enabled = True
 
         self._timer = QTimer(self)
