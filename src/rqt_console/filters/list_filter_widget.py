@@ -51,7 +51,7 @@ class ListFilterWidget(QWidget):
         contain _list ''QObject''
         :param item_provider: a function designed to provide a list or dict
         """
-        super(ListFilterWidget, self).__init__()
+        super().__init__()
 
         pkg_name = 'rqt_console'
         _, package_path = get_resource('packages', pkg_name)
@@ -67,7 +67,8 @@ class ListFilterWidget(QWidget):
         active_color = self.palette().brush(
             QPalette.ColorGroup.Active,
             QPalette.ColorRole.Highlight).color().name()
-        self.setStyleSheet('QListWidget:item:selected:!active { background: %s; }' % active_color)
+        self.setStyleSheet(
+            f'QListWidget:item:selected:!active {{ background: {active_color}; }}')
 
         self._list_populate_function = item_provider
         self.list_widget.itemSelectionChanged.connect(self.handle_item_changed)

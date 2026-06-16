@@ -43,7 +43,7 @@ class TimeFilter(BaseFilter):
     """
 
     def __init__(self):
-        super(TimeFilter, self).__init__()
+        super().__init__()
         self._start_time = QDateTime()
         self._stop_time = QDateTime()
         self._stop_time_enabled = True

@@ -58,7 +58,7 @@ class Console(Plugin):
         :param context: plugin context hook to enable adding widgets as a ROS_GUI pane,
                         ''PluginContext''
         """
-        super(Console, self).__init__(context)
+        super().__init__(context)
         self.setObjectName('Console')
 
         self._context = context
@@ -69,7 +69,7 @@ class Console(Plugin):
         self._widget = ConsoleWidget(self._proxy_model)
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
-                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
+                self._widget.windowTitle() + f' ({context.serial_number():d})')
         context.add_widget(self._widget)
 
         # queue to store incoming data which get flushed periodically to the model

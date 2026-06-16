@@ -40,7 +40,7 @@ class NodeFilter(BaseFilter):
     """
 
     def __init__(self):
-        super(NodeFilter, self).__init__()
+        super().__init__()
         self._selected_items = []
 
     def set_selected_items(self, items):

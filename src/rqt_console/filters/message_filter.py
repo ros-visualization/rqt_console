@@ -52,7 +52,7 @@ class MessageFilter(BaseFilter):
     """
 
     def __init__(self):
-        super(MessageFilter, self).__init__()
+        super().__init__()
         self._text = ''
         self._regex = False
 

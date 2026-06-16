@@ -38,9 +38,9 @@ from packaging.version import Version
 
 from python_qt_binding import loadUi, QT_BINDING_VERSION
 if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
-    from python_qt_binding.QtCore import QRegularExpression  # noqa: F401
+    from python_qt_binding.QtCore import QRegularExpression as NameRegExp
 else:
-    from python_qt_binding.QtCore import QRegExp  # noqa: F401
+    from python_qt_binding.QtCore import QRegExp as NameRegExp
 from python_qt_binding.QtCore import Qt, qWarning
 from python_qt_binding.QtGui import QCursor, QIcon
 from python_qt_binding.QtWidgets import (QApplication, QFileDialog, QHeaderView,
@@ -75,7 +75,7 @@ class ConsoleWidget(QWidget):
         :param minimal: if true the load, save and column buttons will be hidden as well as the
                         filter splitter, ''bool''
         """
-        super(ConsoleWidget, self).__init__()
+        super().__init__()
         self._proxy_model = proxy_model
         self._model = self._proxy_model.sourceModel()
         self._paused = False
@@ -101,10 +101,7 @@ class ConsoleWidget(QWidget):
         self._columnwidth = (60, 100, 70, 100, 100, 100, 100)
         for idx, width in enumerate(self._columnwidth):
             self.table_view.horizontalHeader().resizeSection(idx, width)
-        try:
-            setSectionResizeMode = self.table_view.horizontalHeader().setSectionResizeMode  # Qt5
-        except AttributeError:
-            setSectionResizeMode = self.table_view.horizontalHeader().setResizeMode  # Qt4
+        setSectionResizeMode = self.table_view.horizontalHeader().setSectionResizeMode
         setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
 
         def update_sort_indicator(logical_index, order):
@@ -248,7 +245,7 @@ class ConsoleWidget(QWidget):
                     elif message.severity == Message.FATAL:
                         self.fatal += 1
                     else:
-                        assert False, "Unknown severity type '%s'" % str(message.severity)
+                        assert False, f"Unknown severity type '{str(message.severity)}'"
 
         return Message_Summary(message_subset)
 
@@ -443,11 +440,11 @@ class ConsoleWidget(QWidget):
                 if exclude:
                     filter_index = self._add_exclude_filter(selectiontype.lower())
                     filter_widget = self._exclude_filters[filter_index][1].findChildren(
-                        QWidget, QRegExp('.*FilterWidget.*'))[0]
+                        QWidget, NameRegExp('.*FilterWidget.*'))[0]
                 else:
                     filter_index = self._add_highlight_filter(selectiontype.lower())
                     filter_widget = self._highlight_filters[filter_index][1].findChildren(
-                        QWidget, QRegExp('.*FilterWidget.*'))[0]
+                        QWidget, NameRegExp('.*FilterWidget.*'))[0]
                 filter_widget.set_regex(False)
                 filter_widget.set_text(message)
 
@@ -467,7 +464,7 @@ class ConsoleWidget(QWidget):
                 # if it does use the existing filter
                 if self.filter_factory[selectiontype.lower()][1] not in \
                         [type(item) for sublist in self._highlight_filters for item in sublist]:
-                    filter_index = self._add_highlight_filter(col)
+                    filter_index = self._add_highlight_filter(selectiontype.lower())
                 else:
                     for index, item in enumerate(self._highlight_filters):
                         if type(item[0]) is self.filter_factory[selectiontype.lower()][1]:
@@ -475,11 +472,11 @@ class ConsoleWidget(QWidget):
 
             if exclude:
                 filter_widget = self._exclude_filters[filter_index][1].findChildren(
-                    QWidget, QRegExp('.*FilterWidget.*'))[0]
+                    QWidget, NameRegExp('.*FilterWidget.*'))[0]
                 filter_widget.select_item(selection)
             else:
                 filter_widget = self._highlight_filters[filter_index][1].findChildren(
-                    QWidget, QRegExp('.*FilterWidget.*'))[0]
+                    QWidget, NameRegExp('.*FilterWidget.*'))[0]
                 filter_widget.select_item(selection)
 
     def _rightclick_menu(self, event):
@@ -663,13 +660,13 @@ class ConsoleWidget(QWidget):
                     elif column == 'severity':
                         msg.severity = int(value)
                         if msg.severity not in Message.SEVERITY_LABELS:
-                            skipped.append('Unknown severity value: %s' % value)
+                            skipped.append(f'Unknown severity value: {value}')
                             msg = None
                             break
                     elif column == 'stamp':
                         parts = value.split('.')
                         if len(parts) != 2:
-                            skipped.append('Unknown timestamp format: %s' % value)
+                            skipped.append(f'Unknown timestamp format: {value}')
                             msg = None
                             break
                         msg.stamp = (int(parts[0]), int(parts[1]))
@@ -681,7 +678,7 @@ class ConsoleWidget(QWidget):
                     elif column == 'location':
                         msg.location = value
                     else:
-                        skipped.append('Unknown column: %s' % column)
+                        skipped.append(f'Unknown column: {column}')
                         msg = None
                         break
                 if msg:
@@ -728,10 +725,10 @@ class ConsoleWidget(QWidget):
                     data['location'] = msg.location
                     line = []
                     for column in MessageDataModel.columns:
-                        line.append('"%s"' % data[column])
+                        line.append(f'"{data[column]}"')
                     handle.write(';'.join(line) + '\n')
             except Exception as e:
-                qWarning('File save failed: %s' % str(e))
+                qWarning(f'File save failed: {str(e)}')
                 return False
             finally:
                 handle.close()
@@ -781,15 +778,16 @@ class ConsoleWidget(QWidget):
 
         The delete key removes the tableview's selected rows from the datamodel
         """
-        if event.key() == Qt.Key_Delete and len(self._model._messages) > 0:
-            delete = QMessageBox.Yes
+        if event.key() == Qt.Key.Key_Delete and len(self._model._messages) > 0:
+            delete = QMessageBox.StandardButton.Yes
             if len(self.table_view.selectionModel().selectedIndexes()) == 0:
                 delete = QMessageBox.question(
                     self, self.tr('Message'),
                     self.tr('Are you sure you want to delete all messages?'),
-                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if delete == QMessageBox.Yes and \
-                    event.key() == Qt.Key_Delete and \
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                    QMessageBox.StandardButton.No)
+            if delete == QMessageBox.StandardButton.Yes and \
+                    event.key() == Qt.Key.Key_Delete and \
                     event.modifiers() == Qt.KeyboardModifier.NoModifier:
                 if self._delete_selected_rows():
                     event.accept()
