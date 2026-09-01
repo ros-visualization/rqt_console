@@ -34,13 +34,8 @@ import time
 
 from ament_index_python.resources import get_resource
 
-from packaging.version import Version
-
-from python_qt_binding import loadUi, QT_BINDING_VERSION
-if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
-    from python_qt_binding.QtCore import QRegularExpression as NameRegExp
-else:
-    from python_qt_binding.QtCore import QRegExp as NameRegExp
+from python_qt_binding import loadUi
+from python_qt_binding.QtCore import QRegularExpression as NameRegExp
 from python_qt_binding.QtCore import Qt, qWarning
 from python_qt_binding.QtGui import QCursor, QIcon
 from python_qt_binding.QtWidgets import (QApplication, QFileDialog, QHeaderView,
@@ -525,10 +520,7 @@ class ConsoleWidget(QWidget):
                 menu.addMenu(submenus[-1])
             else:
                 menu.addAction(item[0])
-        if Version(QT_BINDING_VERSION) >= Version('6.0.0'):
-            action = menu.exec(event.globalPosition().toPoint())
-        else:
-            action = menu.exec(event.globalPos())
+        action = menu.exec(event.globalPosition().toPoint())
 
         if action is None or action == 0:
             return
