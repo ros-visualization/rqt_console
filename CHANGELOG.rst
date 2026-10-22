@@ -2,6 +2,11 @@
 Changelog for package rqt_console
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.3 (2026-10-22)
+------------------
+* Added missing depencencies to package.xml (`#62 <https://github.com/ros-visualization/rqt_console/issues/62>`_)
+* Contributors: Alejandro Hernández Cordero
+
 3.0.2 (2026-09-04)
 ------------------
 * Removed Qt5 support (`#61 <https://github.com/ros-visualization/rqt_console/issues/61>`_)
